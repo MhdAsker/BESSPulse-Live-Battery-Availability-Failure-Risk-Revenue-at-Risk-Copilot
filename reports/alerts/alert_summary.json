@@ -1,0 +1,23 @@
+{
+  "alerts_by_priority": {
+    "INFO": 8,
+    "LOW": 1
+  },
+  "alerts_by_type": {
+    "ENERGY_CAPACITY_REDUCTION": 5,
+    "POWER_DERATING": 2,
+    "RACK_UNAVAILABLE": 2
+  },
+  "alerts_per_day": 0.9,
+  "faults_with_prior_alert_fraction": 0.4,
+  "ground_truth_usage": "EVALUATION ONLY; not present in AlertInput or generation",
+  "median_affected_energy_mwh": 0.004479850998986734,
+  "median_affected_power_mw": 0.0,
+  "median_lead_time_minutes": 895.0,
+  "median_revenue_at_risk_eur": 0.0,
+  "open_count": 1,
+  "resolved_count": 8,
+  "risk_24h_limitation": "reliability weight 0.25 due poor out-of-time calibration",
+  "technical_priority_rank_correlation": 0.25000000000000006,
+  "total_alert_episodes": 9
+}

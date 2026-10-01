@@ -1,0 +1,1 @@
+"""BESSPulse dashboard pages."""

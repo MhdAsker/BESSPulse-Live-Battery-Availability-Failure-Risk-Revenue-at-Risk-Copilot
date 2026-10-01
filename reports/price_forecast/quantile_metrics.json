@@ -1,0 +1,11 @@
+{
+  "p10_empirical_coverage": 0.15810334703464474,
+  "p10_gt_p50_fraction": 0.0,
+  "p10_pinball_loss": 8.324406872518718,
+  "p50_empirical_coverage": 0.36611861421021724,
+  "p50_gt_p90_fraction": 0.0,
+  "p50_pinball_loss": 17.338344775156727,
+  "p90_empirical_coverage": 0.7065472695243687,
+  "p90_pinball_loss": 12.051322452533181,
+  "postprocessing": "row-wise sort; raw predictions retained for metrics"
+}

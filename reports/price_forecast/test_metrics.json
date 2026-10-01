@@ -1,0 +1,8 @@
+{
+  "mae": 36.22190399295361,
+  "mean_bias_prediction_minus_actual": -10.712470150714427,
+  "median_absolute_error": 26.326666666666664,
+  "p95_absolute_error": 86.01649999999997,
+  "r2": 0.2848116104119498,
+  "rmse": 64.38301372210294
+}

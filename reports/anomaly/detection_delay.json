@@ -1,0 +1,37 @@
+{
+  "engineering": {
+    "mean_detection_delay_minutes": 0.0,
+    "median_detection_delay_minutes": 0.0,
+    "p90_detection_delay_minutes": null,
+    "minimum_detection_delay_minutes": 0.0,
+    "maximum_detection_delay_minutes": 0.0
+  },
+  "robust_peer": {
+    "mean_detection_delay_minutes": null,
+    "median_detection_delay_minutes": null,
+    "p90_detection_delay_minutes": null,
+    "minimum_detection_delay_minutes": null,
+    "maximum_detection_delay_minutes": null
+  },
+  "isolation_forest": {
+    "mean_detection_delay_minutes": 0.0,
+    "median_detection_delay_minutes": 0.0,
+    "p90_detection_delay_minutes": 0.0,
+    "minimum_detection_delay_minutes": 0.0,
+    "maximum_detection_delay_minutes": 0.0
+  },
+  "residual": {
+    "mean_detection_delay_minutes": 0.0,
+    "median_detection_delay_minutes": 0.0,
+    "p90_detection_delay_minutes": null,
+    "minimum_detection_delay_minutes": 0.0,
+    "maximum_detection_delay_minutes": 0.0
+  },
+  "vote_ensemble": {
+    "mean_detection_delay_minutes": 0.0,
+    "median_detection_delay_minutes": 0.0,
+    "p90_detection_delay_minutes": null,
+    "minimum_detection_delay_minutes": 0.0,
+    "maximum_detection_delay_minutes": 0.0
+  }
+}

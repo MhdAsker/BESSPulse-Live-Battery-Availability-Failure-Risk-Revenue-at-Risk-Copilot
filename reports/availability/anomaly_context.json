@@ -1,0 +1,11 @@
+{
+  "analysis_type": "DESCRIPTIVE_ONLY",
+  "anomaly_before_availability_loss": 0,
+  "anomaly_during_availability_loss": 0,
+  "anomaly_event_count": 63,
+  "anomaly_without_availability_loss": 63,
+  "availability_loss_event_count": 4,
+  "availability_loss_without_prior_anomaly": 4,
+  "availability_reduction_intervals": 144,
+  "status": "evaluated"
+}

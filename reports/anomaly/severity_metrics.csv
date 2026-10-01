@@ -1,0 +1,6 @@
+detector,severity_bin,event_count,detected_count,missed_count,event_detection_rate,median_detection_delay_minutes,mean_detection_delay_minutes
+engineering,high,6,2,4,0.3333333333333333,0.0,0.0
+robust_peer,high,6,0,6,0.0,,
+isolation_forest,high,6,5,1,0.8333333333333334,0.0,0.0
+residual,high,6,2,4,0.3333333333333333,0.0,0.0
+vote_ensemble,high,6,2,4,0.3333333333333333,0.0,0.0

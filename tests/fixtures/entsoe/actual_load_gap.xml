@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GL_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-6:generationloaddocument:3:0">
+  <mRID>fixture-load-document</mRID>
+  <TimeSeries>
+    <mRID>fixture-load-series</mRID>
+    <businessType>A04</businessType>
+    <process.processType>A16</process.processType>
+    <quantity_Measure_Unit.name>MW</quantity_Measure_Unit.name>
+    <Period>
+      <timeInterval><start>2026-03-29T00:00Z</start><end>2026-03-29T01:00Z</end></timeInterval>
+      <resolution>PT15M</resolution>
+      <Point><position>1</position><quantity>50000</quantity></Point>
+      <Point><position>2</position><quantity>50100</quantity></Point>
+      <Point><position>4</position><quantity>50300</quantity></Point>
+    </Period>
+  </TimeSeries>
+</GL_MarketDocument>
+

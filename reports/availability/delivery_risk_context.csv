@@ -1,0 +1,18 @@
+horizon_hours,availability_dimension,availability_bin,row_count,mean_failure_probability,analysis_type,calibration_warning
+6,technical_availability,0.95-<1,36,0.12345679012345674,DESCRIPTIVE_ONLY,
+6,technical_availability,~1,558,0.1742862485572737,DESCRIPTIVE_ONLY,
+6,power_availability,<=0.80,24,0.12345679012345678,DESCRIPTIVE_ONLY,
+6,power_availability,0.95-<1,36,0.12345679012345674,DESCRIPTIVE_ONLY,
+6,power_availability,~1,534,0.17657071859924303,DESCRIPTIVE_ONLY,
+6,discharge_energy_availability,<=0.80,594,0.17120567531886058,DESCRIPTIVE_ONLY,
+12,technical_availability,0.95-<1,36,0.3125,DESCRIPTIVE_ONLY,
+12,technical_availability,~1,576,0.34827233105652744,DESCRIPTIVE_ONLY,
+12,power_availability,0.95-<1,36,0.3125,DESCRIPTIVE_ONLY,
+12,power_availability,~1,576,0.34827233105652744,DESCRIPTIVE_ONLY,
+12,discharge_energy_availability,<=0.80,612,0.3461680762884964,DESCRIPTIVE_ONLY,
+24,technical_availability,0.95-<1,12,0.8864628820960698,DESCRIPTIVE_ONLY,known poor out-of-time calibration
+24,technical_availability,~1,550,0.8937631718854845,DESCRIPTIVE_ONLY,known poor out-of-time calibration
+24,power_availability,0.80-0.95,36,0.8864628820960697,DESCRIPTIVE_ONLY,known poor out-of-time calibration
+24,power_availability,0.95-<1,12,0.8864628820960698,DESCRIPTIVE_ONLY,known poor out-of-time calibration
+24,power_availability,~1,514,0.8942744762287118,DESCRIPTIVE_ONLY,known poor out-of-time calibration
+24,discharge_energy_availability,<=0.80,562,0.8936072938116894,DESCRIPTIVE_ONLY,known poor out-of-time calibration

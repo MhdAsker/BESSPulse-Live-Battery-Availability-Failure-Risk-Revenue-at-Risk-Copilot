@@ -1,0 +1,2 @@
+power_derating_impact_eur,energy_capacity_impact_eur,efficiency_impact_eur,availability_impact_eur,interaction_unattributed_eur,total_revenue_at_risk_eur,method,restoration_order,data_provenance
+2151.4369888831716,124.86479853541823,751.78185033318,64.78899275457661,19.700327711558202,3112.5729582179047,one-factor restoration from current; non-additive and not uniquely causal,not applicable: independent one-factor scenarios,COUNTERFACTUAL / DERIVED

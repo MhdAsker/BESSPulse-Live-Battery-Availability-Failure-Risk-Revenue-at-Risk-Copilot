@@ -1,0 +1,27 @@
+{
+  "engineering": {
+    "false_event_count": 0,
+    "false_alerts_per_day": 0.0,
+    "healthy_evaluation_days": 1.7465277777777777
+  },
+  "robust_peer": {
+    "false_event_count": 0,
+    "false_alerts_per_day": 0.0,
+    "healthy_evaluation_days": 1.7465277777777777
+  },
+  "isolation_forest": {
+    "false_event_count": 30,
+    "false_alerts_per_day": 17.176938369781315,
+    "healthy_evaluation_days": 1.7465277777777777
+  },
+  "residual": {
+    "false_event_count": 0,
+    "false_alerts_per_day": 0.0,
+    "healthy_evaluation_days": 1.7465277777777777
+  },
+  "vote_ensemble": {
+    "false_event_count": 0,
+    "false_alerts_per_day": 0.0,
+    "healthy_evaluation_days": 1.7465277777777777
+  }
+}

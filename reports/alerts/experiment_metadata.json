@@ -1,0 +1,51 @@
+{
+  "alerts_by_priority": {
+    "INFO": 8,
+    "LOW": 1
+  },
+  "alerts_by_type": {
+    "ENERGY_CAPACITY_REDUCTION": 5,
+    "POWER_DERATING": 2,
+    "RACK_UNAVAILABLE": 2
+  },
+  "alerts_per_day": 0.9,
+  "config": {
+    "anomaly_weight": 0.1,
+    "capacity_weight": 0.3,
+    "close_score_threshold": 0.2,
+    "commercial_weight": 0.25,
+    "cooldown_minutes": 60,
+    "critical_threshold": 0.85,
+    "default_formula": "priority_v2_weighted",
+    "engine_version": "alert_engine_v1",
+    "high_threshold": 0.65,
+    "info_threshold": 0.0,
+    "low_threshold": 0.2,
+    "medium_threshold": 0.4,
+    "merge_window_minutes": 30,
+    "open_persistence_intervals": 2,
+    "open_score_threshold": 0.3,
+    "recovery_persistence_intervals": 3,
+    "reference_power_mw": 20.0,
+    "reference_usable_energy_mwh": 32.0,
+    "risk_reliability_12h": 0.85,
+    "risk_reliability_24h": 0.25,
+    "risk_reliability_6h": 1.0,
+    "risk_weight": 0.35,
+    "technical_override_floor": 0.65,
+    "technical_override_threshold": 0.75
+  },
+  "faults_with_prior_alert_fraction": 0.4,
+  "ground_truth_usage": "EVALUATION ONLY; not present in AlertInput or generation",
+  "history_rows": 2219,
+  "median_affected_energy_mwh": 0.004479850998986734,
+  "median_affected_power_mw": 0.0,
+  "median_lead_time_minutes": 895.0,
+  "median_revenue_at_risk_eur": 0.0,
+  "new_database_records": 0,
+  "open_count": 1,
+  "resolved_count": 8,
+  "risk_24h_limitation": "reliability weight 0.25 due poor out-of-time calibration",
+  "technical_priority_rank_correlation": 0.25000000000000006,
+  "total_alert_episodes": 9
+}

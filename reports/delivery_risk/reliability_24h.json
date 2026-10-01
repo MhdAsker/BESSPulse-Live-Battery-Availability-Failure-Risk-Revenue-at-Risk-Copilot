@@ -1,0 +1,14 @@
+[
+  {
+    "bin": 8,
+    "count": 522,
+    "mean_probability": 0.8864628820960696,
+    "observed_frequency": 0.36398467432950193
+  },
+  {
+    "bin": 9,
+    "count": 40,
+    "mean_probability": 0.9868418667005219,
+    "observed_frequency": 0.875
+  }
+]

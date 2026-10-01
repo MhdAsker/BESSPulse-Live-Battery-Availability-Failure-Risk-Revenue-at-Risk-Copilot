@@ -1,0 +1,16 @@
+.env
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.db
+data/*.csv
+data/*.parquet
+data/raw/
+data/processed/
+artifacts/models/
+dist/
+build/
+*.egg-info/

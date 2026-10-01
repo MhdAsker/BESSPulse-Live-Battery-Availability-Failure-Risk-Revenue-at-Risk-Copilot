@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GL_MarketDocument xmlns="urn:iec62325.351:tc57wg16:451-6:generationloaddocument:3:0">
+  <mRID>fixture-generation-document</mRID>
+  <TimeSeries>
+    <mRID>fixture-wind-onshore</mRID><businessType>A01</businessType>
+    <quantity_Measure_Unit.name>MW</quantity_Measure_Unit.name>
+    <MktPSRType><psrType>B19</psrType></MktPSRType>
+    <Period><timeInterval><start>2026-10-25T00:00Z</start><end>2026-10-25T01:00Z</end></timeInterval><resolution>PT30M</resolution>
+      <Point><position>1</position><quantity>12000</quantity></Point><Point><position>2</position><quantity>12100</quantity></Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>fixture-wind-offshore</mRID><businessType>A01</businessType>
+    <quantity_Measure_Unit.name>MW</quantity_Measure_Unit.name>
+    <MktPSRType><psrType>B18</psrType></MktPSRType>
+    <Period><timeInterval><start>2026-10-25T00:00Z</start><end>2026-10-25T01:00Z</end></timeInterval><resolution>PT30M</resolution>
+      <Point><position>1</position><quantity>3000</quantity></Point><Point><position>2</position><quantity>3100</quantity></Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>fixture-solar</mRID><businessType>A01</businessType>
+    <quantity_Measure_Unit.name>MW</quantity_Measure_Unit.name>
+    <MktPSRType><psrType>B16</psrType></MktPSRType>
+    <Period><timeInterval><start>2026-10-25T00:00Z</start><end>2026-10-25T01:00Z</end></timeInterval><resolution>PT30M</resolution>
+      <Point><position>1</position><quantity>0</quantity></Point><Point><position>2</position><quantity>100</quantity></Point>
+    </Period>
+  </TimeSeries>
+  <TimeSeries>
+    <mRID>fixture-unrelated-hydro</mRID><businessType>A01</businessType>
+    <quantity_Measure_Unit.name>MW</quantity_Measure_Unit.name>
+    <MktPSRType><psrType>B12</psrType></MktPSRType>
+    <Period><timeInterval><start>2026-10-25T00:00Z</start><end>2026-10-25T00:30Z</end></timeInterval><resolution>PT30M</resolution>
+      <Point><position>1</position><quantity>5000</quantity></Point>
+    </Period>
+  </TimeSeries>
+</GL_MarketDocument>

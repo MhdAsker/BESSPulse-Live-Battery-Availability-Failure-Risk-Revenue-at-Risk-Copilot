@@ -1,0 +1,69 @@
+{
+  "definitions": {
+    "available_energy_mwh_alias": "available_discharge_energy_mwh",
+    "energy_basis": "deliverable_or_acceptable_ac",
+    "future_fill": "prohibited; exact timestamp rows only",
+    "idle_request_policy": "requested availability is null/not applicable",
+    "power_sign": "positive discharge; negative charge",
+    "unknown_denominator_policy": "unknown is not counted available; installed denominator retained"
+  },
+  "experiment": {
+    "end_timestamp": "2026-02-14T23:55:00+00:00",
+    "fault_event_count": 15,
+    "interval_minutes": 5,
+    "intervals": 2880,
+    "seed": 42,
+    "start_timestamp": "2026-02-05T00:00:00+00:00"
+  },
+  "legacy_simulator_energy_note": "Simulator SiteTelemetry.available_energy_mwh is stored DC energy above SOC minimum; Prompt 7 reports deliverable AC discharge energy and keeps the legacy field unchanged.",
+  "limiting_factor_interval_counts": {
+    "CAPACITY_FADE": 2859,
+    "ENERGY_LIMIT": 2880,
+    "POWER_LIMIT": 144,
+    "RACK_UNAVAILABLE": 72
+  },
+  "prompt5_24h_warning": "known poor out-of-time calibration; descriptive context only",
+  "provenance": "DERIVED ENGINEERING ANALYTIC from SIMULATED telemetry",
+  "scientific_questions": {
+    "anomaly_relationship": {
+      "analysis_type": "DESCRIPTIVE_ONLY",
+      "anomaly_before_availability_loss": 0,
+      "anomaly_during_availability_loss": 0,
+      "anomaly_event_count": 63,
+      "anomaly_without_availability_loss": 63,
+      "availability_loss_event_count": 4,
+      "availability_loss_without_prior_anomaly": 4,
+      "availability_reduction_intervals": 144,
+      "status": "evaluated"
+    },
+    "capability_adequate_delivery_failed_fraction_of_active": 0.0375,
+    "capability_adequate_delivery_failed_interval_count": 108,
+    "power_high_energy_constrained_interval_count": 2736,
+    "power_high_energy_constrained_time_fraction": 0.95,
+    "technical_high_power_reduced_interval_count": 72,
+    "technical_high_power_reduced_time_fraction": 0.025
+  },
+  "summary": {
+    "active_requested_power_intervals": 2880,
+    "end_timestamp": "2026-02-14T23:55:00+00:00",
+    "hours_technical_availability_below_one": 6.0,
+    "mean_charge_energy_availability": 0.5446632494325835,
+    "mean_charge_power_availability": 0.9948437499999999,
+    "mean_discharge_energy_availability": 0.4544835238954636,
+    "mean_discharge_power_availability": 0.9948437499999999,
+    "mean_requested_energy_availability": 1.0,
+    "mean_requested_power_availability": 1.0,
+    "mean_technical_availability": 0.99921875,
+    "minimum_available_discharge_energy_mwh": 12.325374790530613,
+    "minimum_available_discharge_power_mw": 15.5,
+    "minimum_technical_availability": 0.96875,
+    "observed_delivery_success_rate": 0.9625,
+    "pcs_availability_event_count": 4,
+    "rack_availability_event_count": 2,
+    "request_support_rate": 1.0,
+    "snapshot_count": 2880,
+    "start_timestamp": "2026-02-05T00:00:00+00:00",
+    "total_pcs_downtime_minutes": 0.0,
+    "total_rack_downtime_minutes": 360.0
+  }
+}

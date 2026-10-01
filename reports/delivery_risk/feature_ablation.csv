@@ -1,0 +1,13 @@
+horizon_hours,feature_design,status,pr_auc_average_precision,brier_score,feature_count
+6,base,evaluated,0.870732144924346,0.0339201329642405,21.0
+6,base_plus_residual,evaluated,0.7625888454448091,0.04015532549901383,31.0
+6,base_plus_residual_peer,evaluated,0.24752790492103752,0.10111254346096381,35.0
+6,plus_real_entsoe_market,unavailable_no_real_entsoe_rows_in_offline_experiment,,,
+12,base,evaluated,0.5366757147940211,0.13061344232973723,21.0
+12,base_plus_residual,evaluated,0.5351684512202617,0.136318073212954,31.0
+12,base_plus_residual_peer,evaluated,0.24055124859953197,0.19784917002686722,35.0
+12,plus_real_entsoe_market,unavailable_no_real_entsoe_rows_in_offline_experiment,,,
+24,base,evaluated,0.5786141488392222,0.35967150812203763,21.0
+24,base_plus_residual,evaluated,0.6781952874145354,0.3328873100194153,31.0
+24,base_plus_residual_peer,evaluated,0.508834157558024,0.5184163815668866,35.0
+24,plus_real_entsoe_market,unavailable_no_real_entsoe_rows_in_offline_experiment,,,

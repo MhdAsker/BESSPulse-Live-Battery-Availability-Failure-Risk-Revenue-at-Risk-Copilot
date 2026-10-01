@@ -1,0 +1,6 @@
+{
+  "high_bias_prediction_minus_actual": -58.689918243401074,
+  "high_count": 1427,
+  "high_mae": 67.48034571361832,
+  "high_price_threshold_eur_per_mwh": 135.225
+}

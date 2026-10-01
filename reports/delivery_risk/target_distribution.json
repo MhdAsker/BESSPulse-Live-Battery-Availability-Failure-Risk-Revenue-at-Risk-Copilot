@@ -1,0 +1,41 @@
+{
+  "6": {
+    "horizon_hours": 6,
+    "eligible_rows": 3960,
+    "censored_rows": 72,
+    "positive_rows": 535,
+    "negative_rows": 3425,
+    "positive_prevalence": 0.1351010101010101,
+    "time_range": [
+      "2026-02-01 00:00:00+00:00",
+      "2026-02-14 23:55:00+00:00"
+    ],
+    "distinct_failure_events": 8
+  },
+  "12": {
+    "horizon_hours": 12,
+    "eligible_rows": 3888,
+    "censored_rows": 144,
+    "positive_rows": 895,
+    "negative_rows": 2993,
+    "positive_prevalence": 0.23019547325102882,
+    "time_range": [
+      "2026-02-01 00:00:00+00:00",
+      "2026-02-14 23:55:00+00:00"
+    ],
+    "distinct_failure_events": 8
+  },
+  "24": {
+    "horizon_hours": 24,
+    "eligible_rows": 3744,
+    "censored_rows": 288,
+    "positive_rows": 1615,
+    "negative_rows": 2129,
+    "positive_prevalence": 0.43135683760683763,
+    "time_range": [
+      "2026-02-01 00:00:00+00:00",
+      "2026-02-14 23:55:00+00:00"
+    ],
+    "distinct_failure_events": 8
+  }
+}

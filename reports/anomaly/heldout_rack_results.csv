@@ -1,0 +1,2 @@
+heldout_rack,interval_precision,interval_recall,interval_f1,pr_auc_average_precision,fault_event_count,detected_events,missed_events,event_detection_rate,false_event_count,healthy_evaluation_days,false_alerts_per_day,mean_detection_delay_minutes,median_detection_delay_minutes,p90_detection_delay_minutes,minimum_detection_delay_minutes,maximum_detection_delay_minutes
+PCS-01-RACK-03,0.3870967741935484,0.6666666666666666,0.4897959183673469,0.3092717937488126,1,1,0,1.0,2,2.3715277777777777,0.8433382137628112,0.0,0.0,,0.0,0.0

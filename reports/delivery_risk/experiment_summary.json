@@ -1,0 +1,1242 @@
+{
+  "feature_ablation": [
+    {
+      "brier_score": 0.0339201329642405,
+      "feature_count": 21,
+      "feature_design": "base",
+      "horizon_hours": 6,
+      "pr_auc_average_precision": 0.870732144924346,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.04015532549901383,
+      "feature_count": 31,
+      "feature_design": "base_plus_residual",
+      "horizon_hours": 6,
+      "pr_auc_average_precision": 0.7625888454448091,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.10111254346096381,
+      "feature_count": 35,
+      "feature_design": "base_plus_residual_peer",
+      "horizon_hours": 6,
+      "pr_auc_average_precision": 0.24752790492103752,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": null,
+      "feature_count": null,
+      "feature_design": "plus_real_entsoe_market",
+      "horizon_hours": 6,
+      "pr_auc_average_precision": null,
+      "status": "unavailable_no_real_entsoe_rows_in_offline_experiment"
+    },
+    {
+      "brier_score": 0.13061344232973723,
+      "feature_count": 21,
+      "feature_design": "base",
+      "horizon_hours": 12,
+      "pr_auc_average_precision": 0.5366757147940211,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.136318073212954,
+      "feature_count": 31,
+      "feature_design": "base_plus_residual",
+      "horizon_hours": 12,
+      "pr_auc_average_precision": 0.5351684512202617,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.19784917002686722,
+      "feature_count": 35,
+      "feature_design": "base_plus_residual_peer",
+      "horizon_hours": 12,
+      "pr_auc_average_precision": 0.24055124859953197,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": null,
+      "feature_count": null,
+      "feature_design": "plus_real_entsoe_market",
+      "horizon_hours": 12,
+      "pr_auc_average_precision": null,
+      "status": "unavailable_no_real_entsoe_rows_in_offline_experiment"
+    },
+    {
+      "brier_score": 0.35967150812203763,
+      "feature_count": 21,
+      "feature_design": "base",
+      "horizon_hours": 24,
+      "pr_auc_average_precision": 0.5786141488392222,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.3328873100194153,
+      "feature_count": 31,
+      "feature_design": "base_plus_residual",
+      "horizon_hours": 24,
+      "pr_auc_average_precision": 0.6781952874145354,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": 0.5184163815668866,
+      "feature_count": 35,
+      "feature_design": "base_plus_residual_peer",
+      "horizon_hours": 24,
+      "pr_auc_average_precision": 0.508834157558024,
+      "status": "evaluated"
+    },
+    {
+      "brier_score": null,
+      "feature_count": null,
+      "feature_design": "plus_real_entsoe_market",
+      "horizon_hours": 24,
+      "pr_auc_average_precision": null,
+      "status": "unavailable_no_real_entsoe_rows_in_offline_experiment"
+    }
+  ],
+  "horizon_consistency": {
+    "fraction_12h_gt_24h": 0.007936507936507936,
+    "fraction_6h_gt_12h": 0.013227513227513227,
+    "rows_compared": 378.0
+  },
+  "horizons": {
+    "12": {
+      "artifact_directory": "artifacts\\models\\delivery_risk\\12h",
+      "calibration_comparison": {
+        "identity": {
+          "brier_score": 0.3167946531569998,
+          "confusion_matrix": [
+            [
+              265,
+              0
+            ],
+            [
+              155,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.3094224165915121,
+          "f1": 0.0,
+          "positive_prevalence": 0.36904761904761907,
+          "pr_auc_average_precision": 0.46989308478865804,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.44620815581253803,
+          "row_count": 420,
+          "threshold": 0.5
+        },
+        "isotonic": {
+          "brier_score": 0.19874338624338625,
+          "confusion_matrix": [
+            [
+              264,
+              1
+            ],
+            [
+              120,
+              35
+            ]
+          ],
+          "expected_calibration_error": 0.0,
+          "f1": 0.36649214659685864,
+          "positive_prevalence": 0.36904761904761907,
+          "pr_auc_average_precision": 0.5052483358934972,
+          "precision": 0.9722222222222222,
+          "recall": 0.22580645161290322,
+          "roc_auc": 0.6110164333536214,
+          "row_count": 420,
+          "threshold": 0.5
+        },
+        "platt": {
+          "brier_score": 0.22512778851009443,
+          "confusion_matrix": [
+            [
+              265,
+              0
+            ],
+            [
+              155,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.085904920358927,
+          "f1": 0.0,
+          "positive_prevalence": 0.36904761904761907,
+          "pr_auc_average_precision": 0.46989308478865804,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.44620815581253803,
+          "row_count": 420,
+          "threshold": 0.5
+        }
+      },
+      "calibration_method": "isotonic",
+      "distribution": {
+        "censored_rows": 144,
+        "distinct_failure_events": 8,
+        "eligible_rows": 3888,
+        "horizon_hours": 12,
+        "negative_rows": 2993,
+        "positive_prevalence": 0.23019547325102882,
+        "positive_rows": 895,
+        "time_range": [
+          "2026-02-01 00:00:00+00:00",
+          "2026-02-14 23:55:00+00:00"
+        ]
+      },
+      "fault_family_diagnostic": [
+        {
+          "average_predicted_probability": 0.3125,
+          "failure_prevalence": 0.11904761904761904,
+          "group": "NORMAL",
+          "recall": 0.0,
+          "sample_count": 504
+        },
+        {
+          "average_predicted_probability": 0.3125,
+          "failure_prevalence": 0.0,
+          "group": "PCS_DERATING",
+          "recall": 0.0,
+          "sample_count": 36
+        },
+        {
+          "average_predicted_probability": 0.8848572969044386,
+          "failure_prevalence": 0.9722222222222222,
+          "group": "POWER_TRACKING_ERROR",
+          "recall": 0.8571428571428571,
+          "sample_count": 36
+        },
+        {
+          "average_predicted_probability": 0.3125,
+          "failure_prevalence": 1.0,
+          "group": "RACK_OFFLINE",
+          "recall": 0.0,
+          "sample_count": 36
+        }
+      ],
+      "held_out_rack_diagnostic": {
+        "note": "rack signals are symmetric timestamp aggregates",
+        "status": "not_applicable_site_classifier_has_no_rack_identity"
+      },
+      "operating_regime_diagnostics": {
+        "operating_mode": [
+          {
+            "average_predicted_probability": 0.3467416378316033,
+            "failure_prevalence": 0.20761245674740483,
+            "group": "CHARGING",
+            "recall": 0.23333333333333334,
+            "sample_count": 289
+          },
+          {
+            "average_predicted_probability": 0.34915123456790126,
+            "failure_prevalence": 0.21180555555555555,
+            "group": "DISCHARGING",
+            "recall": 0.26229508196721313,
+            "sample_count": 288
+          },
+          {
+            "average_predicted_probability": 0.316884965704883,
+            "failure_prevalence": 0.2857142857142857,
+            "group": "IDLE",
+            "recall": 0.0,
+            "sample_count": 35
+          }
+        ],
+        "power_regime": [
+          {
+            "average_predicted_probability": 0.316884965704883,
+            "failure_prevalence": 0.2857142857142857,
+            "group": "low_request",
+            "recall": 0.0,
+            "sample_count": 35
+          },
+          {
+            "average_predicted_probability": 0.35744810744810745,
+            "failure_prevalence": 0.24175824175824176,
+            "group": "medium_request",
+            "recall": 0.2727272727272727,
+            "sample_count": 455
+          },
+          {
+            "average_predicted_probability": 0.3125,
+            "failure_prevalence": 0.09016393442622951,
+            "group": "high_request",
+            "recall": 0.0,
+            "sample_count": 122
+          }
+        ],
+        "soc_regime": [
+          {
+            "average_predicted_probability": 0.3461680762884964,
+            "failure_prevalence": 0.21405228758169934,
+            "group": "normal_soc",
+            "recall": 0.22900763358778625,
+            "sample_count": 612
+          }
+        ]
+      },
+      "selected_model": "random_forest",
+      "temporal_stability": [
+        {
+          "average_predicted_probability": 0.41350422886548915,
+          "failure_prevalence": 0.6421568627450981,
+          "group": "early",
+          "recall": 0.22900763358778625,
+          "sample_count": 204
+        },
+        {
+          "average_predicted_probability": 0.3125,
+          "failure_prevalence": 0.0,
+          "group": "middle",
+          "recall": 0.0,
+          "sample_count": 204
+        },
+        {
+          "average_predicted_probability": 0.3125,
+          "failure_prevalence": 0.0,
+          "group": "late",
+          "recall": 0.0,
+          "sample_count": 204
+        }
+      ],
+      "test_metrics": {
+        "brier_score": 0.15584204218042558,
+        "confusion_matrix": [
+          [
+            480,
+            1
+          ],
+          [
+            101,
+            30
+          ]
+        ],
+        "expected_calibration_error": 0.13211578870679708,
+        "f1": 0.37037037037037035,
+        "positive_prevalence": 0.21405228758169934,
+        "pr_auc_average_precision": 0.41559075407229296,
+        "precision": 0.967741935483871,
+        "recall": 0.22900763358778625,
+        "roc_auc": 0.6325086096078464,
+        "row_count": 612,
+        "threshold": 0.5
+      },
+      "unseen_high_severity_diagnostic": {
+        "brier_score": 0.21904240568907835,
+        "confusion_matrix": [
+          [
+            36,
+            1
+          ],
+          [
+            41,
+            30
+          ]
+        ],
+        "expected_calibration_error": 0.1566936582334997,
+        "f1": 0.5882352941176471,
+        "positive_prevalence": 0.6574074074074074,
+        "pr_auc_average_precision": 0.8107047301731537,
+        "precision": 0.967741935483871,
+        "recall": 0.4225352112676056,
+        "roc_auc": 0.7320137038446898,
+        "row_count": 108,
+        "threshold": 0.5
+      },
+      "validation_comparison": {
+        "engineering_baseline": {
+          "brier_score": 0.15749227390180878,
+          "confusion_matrix": [
+            [
+              349,
+              0
+            ],
+            [
+              81,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.16911627906976745,
+          "f1": 0.0,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.5378497808819587,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.6940818564505289,
+          "row_count": 430,
+          "threshold": 0.5
+        },
+        "lightgbm": {
+          "brier_score": 0.13807924162389104,
+          "confusion_matrix": [
+            [
+              348,
+              1
+            ],
+            [
+              56,
+              25
+            ]
+          ],
+          "expected_calibration_error": 0.14718412145671717,
+          "f1": 0.4672897196261682,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.4199483602387819,
+          "precision": 0.9615384615384616,
+          "recall": 0.30864197530864196,
+          "roc_auc": 0.6085641515440943,
+          "row_count": 430,
+          "threshold": 0.5
+        },
+        "logistic_regression": {
+          "brier_score": 0.19784917002686722,
+          "confusion_matrix": [
+            [
+              309,
+              40
+            ],
+            [
+              46,
+              35
+            ]
+          ],
+          "expected_calibration_error": 0.20202544555982718,
+          "f1": 0.44871794871794873,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.24055124859953197,
+          "precision": 0.4666666666666667,
+          "recall": 0.43209876543209874,
+          "roc_auc": 0.552937847111677,
+          "row_count": 430,
+          "threshold": 0.5
+        },
+        "prevalence_baseline": {
+          "brier_score": 0.15296607791230754,
+          "confusion_matrix": [
+            [
+              349,
+              0
+            ],
+            [
+              81,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.008833477175713145,
+          "f1": 0.0,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.1883720930232558,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5,
+          "row_count": 430,
+          "threshold": 0.5
+        },
+        "random_forest": {
+          "brier_score": 0.15924242268048883,
+          "confusion_matrix": [
+            [
+              349,
+              0
+            ],
+            [
+              81,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.16895209449396711,
+          "f1": 0.0,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.5179570553975525,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.6274187272277053,
+          "row_count": 430,
+          "threshold": 0.5
+        },
+        "xgboost": {
+          "brier_score": 0.186544353100162,
+          "confusion_matrix": [
+            [
+              349,
+              0
+            ],
+            [
+              81,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.18397384434180378,
+          "f1": 0.0,
+          "positive_prevalence": 0.1883720930232558,
+          "pr_auc_average_precision": 0.31591508277949026,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5812550850755244,
+          "row_count": 430,
+          "threshold": 0.5
+        }
+      }
+    },
+    "24": {
+      "artifact_directory": "artifacts\\models\\delivery_risk\\24h",
+      "calibration_comparison": {
+        "identity": {
+          "brier_score": 0.7636625682295446,
+          "confusion_matrix": [
+            [
+              27,
+              0
+            ],
+            [
+              247,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.8160572110211486,
+          "f1": 0.0,
+          "positive_prevalence": 0.9014598540145985,
+          "pr_auc_average_precision": 0.8706555116660802,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.23024441445494076,
+          "row_count": 274,
+          "threshold": 0.5
+        },
+        "isotonic": {
+          "brier_score": 0.0876205654543716,
+          "confusion_matrix": [
+            [
+              0,
+              27
+            ],
+            [
+              0,
+              247
+            ]
+          ],
+          "expected_calibration_error": 2.220446049250313e-16,
+          "f1": 0.9481765834932822,
+          "positive_prevalence": 0.9014598540145985,
+          "pr_auc_average_precision": 0.916854319966114,
+          "precision": 0.9014598540145985,
+          "recall": 1.0,
+          "roc_auc": 0.5720497825760984,
+          "row_count": 274,
+          "threshold": 0.5
+        },
+        "platt": {
+          "brier_score": 0.08863989655601856,
+          "confusion_matrix": [
+            [
+              0,
+              27
+            ],
+            [
+              0,
+              247
+            ]
+          ],
+          "expected_calibration_error": 0.024117444394483198,
+          "f1": 0.9481765834932822,
+          "positive_prevalence": 0.9014598540145985,
+          "pr_auc_average_precision": 0.9731905639155243,
+          "precision": 0.9014598540145985,
+          "recall": 1.0,
+          "roc_auc": 0.7697555855450593,
+          "row_count": 274,
+          "threshold": 0.5
+        }
+      },
+      "calibration_method": "isotonic",
+      "distribution": {
+        "censored_rows": 288,
+        "distinct_failure_events": 8,
+        "eligible_rows": 3744,
+        "horizon_hours": 24,
+        "negative_rows": 2129,
+        "positive_prevalence": 0.43135683760683763,
+        "positive_rows": 1615,
+        "time_range": [
+          "2026-02-01 00:00:00+00:00",
+          "2026-02-14 23:55:00+00:00"
+        ]
+      },
+      "fault_family_diagnostic": [
+        {
+          "average_predicted_probability": 0.8871107862185713,
+          "failure_prevalence": 0.3392070484581498,
+          "group": "NORMAL",
+          "recall": 1.0,
+          "sample_count": 454
+        },
+        {
+          "average_predicted_probability": 0.8864628820960697,
+          "failure_prevalence": 0.0,
+          "group": "PCS_DERATING",
+          "recall": 0.0,
+          "sample_count": 36
+        },
+        {
+          "average_predicted_probability": 0.9898242963339133,
+          "failure_prevalence": 0.9722222222222222,
+          "group": "POWER_TRACKING_ERROR",
+          "recall": 1.0,
+          "sample_count": 36
+        },
+        {
+          "average_predicted_probability": 0.8864628820960697,
+          "failure_prevalence": 1.0,
+          "group": "RACK_OFFLINE",
+          "recall": 1.0,
+          "sample_count": 36
+        }
+      ],
+      "held_out_rack_diagnostic": {
+        "note": "rack signals are symmetric timestamp aggregates",
+        "status": "not_applicable_site_classifier_has_no_rack_identity"
+      },
+      "operating_regime_diagnostics": {
+        "operating_mode": [
+          {
+            "average_predicted_probability": 0.8936947171422005,
+            "failure_prevalence": 0.39097744360902253,
+            "group": "CHARGING",
+            "recall": 1.0,
+            "sample_count": 266
+          },
+          {
+            "average_predicted_probability": 0.8926668992181891,
+            "failure_prevalence": 0.39849624060150374,
+            "group": "DISCHARGING",
+            "recall": 1.0,
+            "sample_count": 266
+          },
+          {
+            "average_predicted_probability": 0.9011703056768557,
+            "failure_prevalence": 0.5,
+            "group": "IDLE",
+            "recall": 1.0,
+            "sample_count": 30
+          }
+        ],
+        "power_regime": [
+          {
+            "average_predicted_probability": 0.9011703056768557,
+            "failure_prevalence": 0.5,
+            "group": "low_request",
+            "recall": 1.0,
+            "sample_count": 30
+          },
+          {
+            "average_predicted_probability": 0.8949520428484555,
+            "failure_prevalence": 0.3681710213776722,
+            "group": "medium_request",
+            "recall": 1.0,
+            "sample_count": 421
+          },
+          {
+            "average_predicted_probability": 0.8864628820960697,
+            "failure_prevalence": 0.4954954954954955,
+            "group": "high_request",
+            "recall": 1.0,
+            "sample_count": 111
+          }
+        ],
+        "soc_regime": [
+          {
+            "average_predicted_probability": 0.8936072938116894,
+            "failure_prevalence": 0.400355871886121,
+            "group": "normal_soc",
+            "recall": 1.0,
+            "sample_count": 562
+          }
+        ]
+      },
+      "selected_model": "random_forest",
+      "temporal_stability": [
+        {
+          "average_predicted_probability": 0.8864628820960699,
+          "failure_prevalence": 1.0,
+          "group": "early",
+          "recall": 1.0,
+          "sample_count": 187
+        },
+        {
+          "average_predicted_probability": 0.9063613361739434,
+          "failure_prevalence": 0.20320855614973263,
+          "group": "middle",
+          "recall": 1.0,
+          "sample_count": 187
+        },
+        {
+          "average_predicted_probability": 0.8880275016259406,
+          "failure_prevalence": 0.0,
+          "group": "late",
+          "recall": 0.0,
+          "sample_count": 188
+        }
+      ],
+      "test_metrics": {
+        "brier_score": 0.4769397438798467,
+        "confusion_matrix": [
+          [
+            0,
+            337
+          ],
+          [
+            0,
+            225
+          ]
+        ],
+        "expected_calibration_error": 0.493251421925568,
+        "f1": 0.5717916137229987,
+        "positive_prevalence": 0.400355871886121,
+        "pr_auc_average_precision": 0.4848488446337752,
+        "precision": 0.400355871886121,
+        "recall": 1.0,
+        "roc_auc": 0.5710253874052094,
+        "row_count": 562,
+        "threshold": 0.5
+      },
+      "unseen_high_severity_diagnostic": {
+        "brier_score": 0.275619492090108,
+        "confusion_matrix": [
+          [
+            0,
+            37
+          ],
+          [
+            0,
+            71
+          ]
+        ],
+        "expected_calibration_error": 0.2635092794346103,
+        "f1": 0.7932960893854749,
+        "positive_prevalence": 0.6574074074074074,
+        "pr_auc_average_precision": 0.8080365719219533,
+        "precision": 0.6574074074074074,
+        "recall": 1.0,
+        "roc_auc": 0.7308717167872097,
+        "row_count": 108,
+        "threshold": 0.5
+      },
+      "validation_comparison": {
+        "engineering_baseline": {
+          "brier_score": 0.5374420431420431,
+          "confusion_matrix": [
+            [
+              113,
+              0
+            ],
+            [
+              160,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.5557509157509157,
+          "f1": 0.0,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.6709655758283314,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5373064159292036,
+          "row_count": 273,
+          "threshold": 0.5
+        },
+        "lightgbm": {
+          "brier_score": 0.5815006970706387,
+          "confusion_matrix": [
+            [
+              113,
+              0
+            ],
+            [
+              160,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.5824030032590511,
+          "f1": 0.0,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.677258188225539,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.6011891592920354,
+          "row_count": 273,
+          "threshold": 0.5
+        },
+        "logistic_regression": {
+          "brier_score": 0.5184163815668866,
+          "confusion_matrix": [
+            [
+              76,
+              37
+            ],
+            [
+              125,
+              35
+            ]
+          ],
+          "expected_calibration_error": 0.5289490069278157,
+          "f1": 0.3017241379310345,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.508834157558024,
+          "precision": 0.4861111111111111,
+          "recall": 0.21875,
+          "roc_auc": 0.4254424778761061,
+          "row_count": 273,
+          "threshold": 0.5
+        },
+        "prevalence_baseline": {
+          "brier_score": 0.2915704251721731,
+          "confusion_matrix": [
+            [
+              113,
+              0
+            ],
+            [
+              160,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.22131491696709094,
+          "f1": 0.0,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.5860805860805861,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5,
+          "row_count": 273,
+          "threshold": 0.5
+        },
+        "random_forest": {
+          "brier_score": 0.5438240548979232,
+          "confusion_matrix": [
+            [
+              113,
+              0
+            ],
+            [
+              160,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.5566525370915953,
+          "f1": 0.0,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.7077114660980921,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.623091814159292,
+          "row_count": 273,
+          "threshold": 0.5
+        },
+        "xgboost": {
+          "brier_score": 0.5797722894668681,
+          "confusion_matrix": [
+            [
+              113,
+              0
+            ],
+            [
+              160,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.5803844382809031,
+          "f1": 0.0,
+          "positive_prevalence": 0.5860805860805861,
+          "pr_auc_average_precision": 0.510669367922027,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.3681139380530974,
+          "row_count": 273,
+          "threshold": 0.5
+        }
+      }
+    },
+    "6": {
+      "artifact_directory": "artifacts\\models\\delivery_risk\\6h",
+      "calibration_comparison": {
+        "identity": {
+          "brier_score": 0.15371865776307203,
+          "confusion_matrix": [
+            [
+              427,
+              0
+            ],
+            [
+              95,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.13622834564010322,
+          "f1": 0.0,
+          "positive_prevalence": 0.18199233716475097,
+          "pr_auc_average_precision": 0.44912830340589216,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.4569826204856403,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "isotonic": {
+          "brier_score": 0.10261458776784443,
+          "confusion_matrix": [
+            [
+              426,
+              1
+            ],
+            [
+              60,
+              35
+            ]
+          ],
+          "expected_calibration_error": 6.460349496741212e-17,
+          "f1": 0.5343511450381679,
+          "positive_prevalence": 0.18199233716475097,
+          "pr_auc_average_precision": 0.4731296632385561,
+          "precision": 0.9722222222222222,
+          "recall": 0.3684210526315789,
+          "roc_auc": 0.6830395661284359,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "platt": {
+          "brier_score": 0.14065655587863796,
+          "confusion_matrix": [
+            [
+              427,
+              0
+            ],
+            [
+              95,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.059910079185712325,
+          "f1": 0.0,
+          "positive_prevalence": 0.18199233716475097,
+          "pr_auc_average_precision": 0.4491283034058922,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.4571798348329841,
+          "row_count": 522,
+          "threshold": 0.5
+        }
+      },
+      "calibration_method": "isotonic",
+      "distribution": {
+        "censored_rows": 72,
+        "distinct_failure_events": 8,
+        "eligible_rows": 3960,
+        "horizon_hours": 6,
+        "negative_rows": 3425,
+        "positive_prevalence": 0.1351010101010101,
+        "positive_rows": 535,
+        "time_range": [
+          "2026-02-01 00:00:00+00:00",
+          "2026-02-14 23:55:00+00:00"
+        ]
+      },
+      "fault_family_diagnostic": [
+        {
+          "average_predicted_probability": 0.12346541712641129,
+          "failure_prevalence": 0.011494252873563218,
+          "group": "NORMAL",
+          "recall": 0.0,
+          "sample_count": 522
+        },
+        {
+          "average_predicted_probability": 0.12345679012345674,
+          "failure_prevalence": 0.0,
+          "group": "PCS_DERATING",
+          "recall": 0.0,
+          "sample_count": 36
+        },
+        {
+          "average_predicted_probability": 0.9111883043047797,
+          "failure_prevalence": 0.9722222222222222,
+          "group": "POWER_TRACKING_ERROR",
+          "recall": 1.0,
+          "sample_count": 36
+        }
+      ],
+      "held_out_rack_diagnostic": {
+        "note": "rack signals are symmetric timestamp aggregates",
+        "status": "not_applicable_site_classifier_has_no_rack_identity"
+      },
+      "operating_regime_diagnostics": {
+        "operating_mode": [
+          {
+            "average_predicted_probability": 0.1686038875755188,
+            "failure_prevalence": 0.06028368794326241,
+            "group": "CHARGING",
+            "recall": 0.8235294117647058,
+            "sample_count": 282
+          },
+          {
+            "average_predicted_probability": 0.17162966320545142,
+            "failure_prevalence": 0.0673758865248227,
+            "group": "DISCHARGING",
+            "recall": 0.8421052631578947,
+            "sample_count": 282
+          },
+          {
+            "average_predicted_probability": 0.19167699397232008,
+            "failure_prevalence": 0.16666666666666666,
+            "group": "IDLE",
+            "recall": 1.0,
+            "sample_count": 30
+          }
+        ],
+        "power_regime": [
+          {
+            "average_predicted_probability": 0.19167699397232008,
+            "failure_prevalence": 0.16666666666666666,
+            "group": "low_request",
+            "recall": 1.0,
+            "sample_count": 30
+          },
+          {
+            "average_predicted_probability": 0.18155001681353175,
+            "failure_prevalence": 0.07947019867549669,
+            "group": "medium_request",
+            "recall": 0.8333333333333334,
+            "sample_count": 453
+          },
+          {
+            "average_predicted_probability": 0.12345679012345685,
+            "failure_prevalence": 0.0,
+            "group": "high_request",
+            "recall": 0.0,
+            "sample_count": 111
+          }
+        ],
+        "soc_regime": [
+          {
+            "average_predicted_probability": 0.17120567531886058,
+            "failure_prevalence": 0.06902356902356903,
+            "group": "normal_soc",
+            "recall": 0.8536585365853658,
+            "sample_count": 594
+          }
+        ]
+      },
+      "selected_model": "random_forest",
+      "temporal_stability": [
+        {
+          "average_predicted_probability": 0.26668070179278813,
+          "failure_prevalence": 0.20707070707070707,
+          "group": "early",
+          "recall": 0.8536585365853658,
+          "sample_count": 198
+        },
+        {
+          "average_predicted_probability": 0.12345679012345684,
+          "failure_prevalence": 0.0,
+          "group": "middle",
+          "recall": 0.0,
+          "sample_count": 198
+        },
+        {
+          "average_predicted_probability": 0.12347953404033678,
+          "failure_prevalence": 0.0,
+          "group": "late",
+          "recall": 0.0,
+          "sample_count": 198
+        }
+      ],
+      "test_metrics": {
+        "brier_score": 0.025394440980821588,
+        "confusion_matrix": [
+          [
+            552,
+            1
+          ],
+          [
+            6,
+            35
+          ]
+        ],
+        "expected_calibration_error": 0.11004779630847948,
+        "f1": 0.9090909090909091,
+        "positive_prevalence": 0.06902356902356903,
+        "pr_auc_average_precision": 0.8367685509699672,
+        "precision": 0.9722222222222222,
+        "recall": 0.8536585365853658,
+        "roc_auc": 0.9256825298813567,
+        "row_count": 594,
+        "threshold": 0.5
+      },
+      "unseen_high_severity_diagnostic": {
+        "brier_score": 0.03622976343323572,
+        "confusion_matrix": [
+          [
+            36,
+            1
+          ],
+          [
+            0,
+            35
+          ]
+        ],
+        "expected_calibration_error": 0.09610337871180748,
+        "f1": 0.9859154929577465,
+        "positive_prevalence": 0.4861111111111111,
+        "pr_auc_average_precision": 0.9683819764464926,
+        "precision": 0.9722222222222222,
+        "recall": 1.0,
+        "roc_auc": 0.9845559845559846,
+        "row_count": 72,
+        "threshold": 0.5
+      },
+      "validation_comparison": {
+        "engineering_baseline": {
+          "brier_score": 0.053106662409535974,
+          "confusion_matrix": [
+            [
+              481,
+              0
+            ],
+            [
+              41,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.06268199233716475,
+          "f1": 0.0,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.8362438215148363,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.9124790832107904,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "lightgbm": {
+          "brier_score": 0.07803498788447513,
+          "confusion_matrix": [
+            [
+              481,
+              0
+            ],
+            [
+              41,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.07523361049233633,
+          "f1": 0.0,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.07854406130268199,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "logistic_regression": {
+          "brier_score": 0.10111254346096381,
+          "confusion_matrix": [
+            [
+              445,
+              36
+            ],
+            [
+              14,
+              27
+            ]
+          ],
+          "expected_calibration_error": 0.09934848151766958,
+          "f1": 0.5192307692307693,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.24752790492103752,
+          "precision": 0.42857142857142855,
+          "recall": 0.6585365853658537,
+          "roc_auc": 0.8420465493636226,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "prevalence_baseline": {
+          "brier_score": 0.07290713387688635,
+          "confusion_matrix": [
+            [
+              481,
+              0
+            ],
+            [
+              41,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.023070373645086323,
+          "f1": 0.0,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.07854406130268199,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.5,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "random_forest": {
+          "brier_score": 0.05542896392291489,
+          "confusion_matrix": [
+            [
+              481,
+              0
+            ],
+            [
+              41,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.06338524241609525,
+          "f1": 0.0,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.837900582883575,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.9167892094721363,
+          "row_count": 522,
+          "threshold": 0.5
+        },
+        "xgboost": {
+          "brier_score": 0.07450556097415224,
+          "confusion_matrix": [
+            [
+              481,
+              0
+            ],
+            [
+              41,
+              0
+            ]
+          ],
+          "expected_calibration_error": 0.07402936809328724,
+          "f1": 0.0,
+          "positive_prevalence": 0.07854406130268199,
+          "pr_auc_average_precision": 0.8448275862068965,
+          "precision": 0.0,
+          "recall": 0.0,
+          "roc_auc": 0.8757162415699002,
+          "row_count": 522,
+          "threshold": 0.5
+        }
+      }
+    }
+  },
+  "simulation": {
+    "duration_hours": 336,
+    "fault_events": 11,
+    "interval_minutes": 5,
+    "intervals": 4032,
+    "market_context": "not loaded; no live ENTSO-E access",
+    "seed": 42
+  }
+}

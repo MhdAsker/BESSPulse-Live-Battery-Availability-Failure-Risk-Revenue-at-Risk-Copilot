@@ -1,0 +1,4 @@
+ablation,features,mae,rmse,r2,mean_bias_prediction_minus_actual,median_absolute_error,p95_absolute_error
+A_calendar_only,hour_of_day|day_of_week|hour_of_week|is_weekend|utc_offset_hours,31.64404320121428,40.65704724708899,0.3505143983462554,-11.333885601677439,26.531736255937403,77.1964552255089
+B_price_lags_plus_calendar,price_lag_24h|price_lag_168h|hour_of_day|day_of_week|hour_of_week|is_weekend|utc_offset_hours,23.371353844971022,30.982294044837644,0.6228405431524715,-1.7870862087321306,18.862007878005144,59.61850104333831
+C_plus_rolling_price,price_lag_24h|price_lag_168h|rolling_price_mean_24h|rolling_price_mean_7d|price_volatility_24h|price_volatility_7d|hour_of_day|day_of_week|hour_of_week|is_weekend|utc_offset_hours,24.910266487249633,32.57637514138205,0.5830313783864295,-4.964041923971139,20.502809142335767,62.72031199383623

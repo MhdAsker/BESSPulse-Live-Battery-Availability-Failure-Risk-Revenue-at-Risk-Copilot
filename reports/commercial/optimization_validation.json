@@ -1,0 +1,20 @@
+{
+  "current": {
+    "all_checks_passed": true,
+    "max_charge_limit_violation_mw": 0.0,
+    "max_discharge_limit_violation_mw": 0.0,
+    "max_energy_balance_error_mwh": 1.7763568394002505e-15,
+    "max_simultaneous_charge_discharge_mw": 0.0,
+    "objective_reconstruction_error_eur": 7.275957614183426e-12,
+    "terminal_energy_error_mwh": 9.999999992515995e-07
+  },
+  "healthy": {
+    "all_checks_passed": true,
+    "max_charge_limit_violation_mw": 0.0,
+    "max_discharge_limit_violation_mw": 0.0,
+    "max_energy_balance_error_mwh": 3.552713678800501e-15,
+    "max_simultaneous_charge_discharge_mw": 0.0,
+    "objective_reconstruction_error_eur": 0.0,
+    "terminal_energy_error_mwh": 9.999999992515995e-07
+  }
+}

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GL_MarketDocument xmlns="urn:test:entsoe">
+  <mRID>fixture-empty</mRID>
+  <TimeSeries><mRID>fixture-empty-series</mRID><Period><timeInterval><start>2026-01-01T00:00Z</start><end>2026-01-01T01:00Z</end></timeInterval><resolution>PT60M</resolution></Period></TimeSeries>
+</GL_MarketDocument>
+

@@ -1,0 +1,5 @@
+component_id,downtime_minutes,availability_fraction,number_of_outage_events,longest_outage_minutes,unknown_minutes,data_provenance
+PCS-01,0.0,1.0,0,0.0,0.0,DERIVED ENGINEERING ANALYTIC
+PCS-02,0.0,1.0,0,0.0,0.0,DERIVED ENGINEERING ANALYTIC
+PCS-03,0.0,1.0,0,0.0,0.0,DERIVED ENGINEERING ANALYTIC
+PCS-04,0.0,1.0,0,0.0,0.0,DERIVED ENGINEERING ANALYTIC
