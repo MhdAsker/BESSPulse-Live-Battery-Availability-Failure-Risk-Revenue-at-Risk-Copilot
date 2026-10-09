@@ -74,7 +74,7 @@ strict = true
 packages = ["besspulse", "api", "dashboard"]
 
 [[tool.mypy.overrides]]
-module = ["sklearn.*", "joblib", "xgboost.*", "shap.*", "cvxpy.*", "streamlit.*", "plotly.*"]
+module = ["sklearn.*", "joblib", "xgboost.*", "shap.*", "cvxpy.*", "streamlit.*", "plotly.*", "matplotlib.*"]
 ignore_missing_imports = true
 
 [[tool.mypy.overrides]]

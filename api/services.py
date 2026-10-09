@@ -8,7 +8,7 @@ import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from threading import Lock
-from typing import Any
+from typing import Any, cast
 from uuid import UUID, uuid4
 
 from sqlalchemy import desc, func, select
@@ -515,8 +515,12 @@ class RackService:
             availability=row.availability,
             alarm_code=row.alarm_code,
             operating_state=row.operating_state,
-            peer_temperature_mean_c=float(peer_temp) if peer_temp is not None else None,
-            peer_voltage_mean_v=float(peer_voltage) if peer_voltage is not None else None,
+            peer_temperature_mean_c=(
+                float(cast(float, peer_temp)) if peer_temp is not None else None
+            ),
+            peer_voltage_mean_v=(
+                float(cast(float, peer_voltage)) if peer_voltage is not None else None
+            ),
             expected_temperature_c=expected.prediction_value if expected else None,
             thermal_residual_c=expected.residual_value if expected else None,
             anomaly_summary=AnomalySummary(
