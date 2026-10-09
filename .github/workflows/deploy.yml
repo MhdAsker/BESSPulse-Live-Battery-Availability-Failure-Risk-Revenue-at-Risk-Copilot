@@ -20,8 +20,18 @@ jobs:
       - name: Trigger FastAPI deployment
         env:
           DEPLOY_HOOK: ${{ secrets.RENDER_API_DEPLOY_HOOK }}
-        run: test -n "$DEPLOY_HOOK" && curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "FastAPI deploy hook is not configured; no deployment requested."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null
       - name: Trigger Streamlit deployment
         env:
           DEPLOY_HOOK: ${{ secrets.RENDER_DASHBOARD_DEPLOY_HOOK }}
-        run: test -n "$DEPLOY_HOOK" && curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null
+        run: |
+          if [ -z "$DEPLOY_HOOK" ]; then
+            echo "Streamlit deploy hook is not configured; no deployment requested."
+            exit 0
+          fi
+          curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null
