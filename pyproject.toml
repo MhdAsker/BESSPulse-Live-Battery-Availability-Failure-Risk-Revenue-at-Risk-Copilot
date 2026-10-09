@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "besspulse"
-version = "0.1.0"
+version = "1.0.0"
 description = "Reproducible reduced-order BESS telemetry simulator"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -21,13 +21,16 @@ dependencies = [
   "lightgbm>=4.5,<5",
   "joblib>=1.4,<2",
   "xgboost>=2.1,<3",
-  "shap>=0.51,<1",
-  "cvxpy>=1.6,<2",
+  "shap>=0.46,<0.50",
+  "cvxpy>=1.6,<1.7",
   "highspy>=1.7,<2",
   "fastapi>=0.111,<1",
   "uvicorn>=0.29,<1",
   "streamlit>=1.37,<2",
   "plotly>=5.24,<6",
+  "alembic>=1.13,<2",
+  "psycopg[binary]>=3.2,<4",
+  "mlflow-skinny>=2.17,<4",
 ]
 
 [project.optional-dependencies]
@@ -50,6 +53,7 @@ where = ["src"]
 addopts = "-ra --strict-markers"
 testpaths = ["tests"]
 pythonpath = ["."]
+markers = ["postgres: optional PostgreSQL integration tests"]
 
 [tool.ruff]
 target-version = "py312"
@@ -62,6 +66,7 @@ select = ["E", "F", "I", "UP", "B", "SIM", "RUF"]
 [tool.ruff.lint.per-file-ignores]
 "dashboard/**/*.py" = ["E501"]
 "tests/test_dashboard.py" = ["E501"]
+"alembic/versions/*.py" = ["E501"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -71,3 +76,8 @@ packages = ["besspulse", "api", "dashboard"]
 [[tool.mypy.overrides]]
 module = ["sklearn.*", "joblib", "xgboost.*", "shap.*", "cvxpy.*", "streamlit.*", "plotly.*"]
 ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = ["mlflow.*", "google.*"]
+ignore_missing_imports = true
+follow_imports = "skip"

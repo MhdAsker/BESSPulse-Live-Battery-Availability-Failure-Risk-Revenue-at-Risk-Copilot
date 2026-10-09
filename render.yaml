@@ -1,0 +1,47 @@
+services:
+  - type: web
+    runtime: docker
+    name: besspulse-api
+    region: frankfurt
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: uvicorn api.main:app --host 0.0.0.0 --port $PORT --proxy-headers
+    preDeployCommand: alembic upgrade head
+    healthCheckPath: /api/v1/health/live
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: API_CORS_ORIGINS
+        sync: false
+      - key: ENABLE_SIMULATION_CONTROL_API
+        value: "false"
+      - key: RAG_BACKEND
+        value: local
+      - key: RAG_ENABLED
+        value: "false"
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ENTSOE_API_TOKEN
+        sync: false
+      - key: API_JSON_LOGS
+        value: "true"
+      - key: BUILD_COMMIT
+        sync: false
+
+  - type: web
+    runtime: docker
+    name: besspulse-dashboard
+    region: frankfurt
+    dockerfilePath: ./Dockerfile.dashboard
+    dockerContext: .
+    dockerCommand: streamlit run dashboard/app.py --server.address=0.0.0.0 --server.port=$PORT --server.headless=true
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: BESSPULSE_API_URL
+        sync: false
+      - key: DASHBOARD_DEMO_FALLBACK
+        value: "false"

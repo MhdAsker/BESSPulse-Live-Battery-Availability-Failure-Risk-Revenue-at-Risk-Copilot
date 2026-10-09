@@ -19,6 +19,7 @@ from api.services import (
     RiskService,
     SimulationService,
 )
+from monitoring.service import MonitoringService
 
 
 def get_api_settings(request: Request) -> APISettings:
@@ -70,6 +71,10 @@ def get_market_service(session: DBSession, settings: Settings) -> MarketService:
 
 def get_health_service(session: DBSession) -> HealthService:
     return HealthService(session)
+
+
+def get_monitoring_service(session: DBSession) -> MonitoringService:
+    return MonitoringService(session)
 
 
 def get_simulation_service(request: Request) -> SimulationService:

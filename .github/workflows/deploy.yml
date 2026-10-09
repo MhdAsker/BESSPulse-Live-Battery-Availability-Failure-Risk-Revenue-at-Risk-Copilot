@@ -1,0 +1,27 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger FastAPI deployment
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_API_DEPLOY_HOOK }}
+        run: test -n "$DEPLOY_HOOK" && curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null
+      - name: Trigger Streamlit deployment
+        env:
+          DEPLOY_HOOK: ${{ secrets.RENDER_DASHBOARD_DEPLOY_HOOK }}
+        run: test -n "$DEPLOY_HOOK" && curl --fail --silent --show-error --request POST "$DEPLOY_HOOK" >/dev/null

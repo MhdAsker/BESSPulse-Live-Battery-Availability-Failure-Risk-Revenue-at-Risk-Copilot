@@ -36,8 +36,18 @@ def health(service: Annotated[HealthService, Depends(get_health_service)]) -> He
 
 
 @router.get("/live", response_model=HealthResponse, summary="Process liveness")
-def live(service: Annotated[HealthService, Depends(get_health_service)]) -> HealthResponse:
-    return health(service)
+def live() -> HealthResponse:
+    return HealthResponse(
+        status="healthy",
+        version=__version__,
+        liveness="alive",
+        readiness="unknown",
+        database_status="not_checked",
+        model_status="not_checked",
+        market_data_status="not_checked",
+        components={"process": "available"},
+        timestamp_utc=datetime.now(UTC),
+    )
 
 
 @router.get("/ready", response_model=HealthResponse, summary="Core dependency readiness")

@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from typing import Any
 
 from sqlalchemy import (
     Boolean,
@@ -11,9 +12,11 @@ from sqlalchemy import (
     Index,
     Integer,
     String,
+    Text,
     UniqueConstraint,
     create_engine,
 )
+from sqlalchemy.engine import Engine, make_url
 from sqlalchemy.orm import (
     DeclarativeBase,
     Mapped,
@@ -80,6 +83,7 @@ class BatteryTelemetryModel(Base):
 
 class PCSTelemetryModel(Base):
     __tablename__ = "pcs_telemetry"
+    __table_args__ = (Index("ix_pcs_telemetry_pcs_time", "pcs_id", "timestamp_utc"),)
     id: Mapped[int] = mapped_column(primary_key=True)
     timestamp_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     pcs_id: Mapped[str] = mapped_column(String(64), index=True)
@@ -186,6 +190,7 @@ class ModelPredictionModel(Base):
             "entity_id",
             "timestamp_utc",
         ),
+        Index("ix_model_prediction_name_time", "model_name", "timestamp_utc"),
     )
     id: Mapped[int] = mapped_column(primary_key=True)
     timestamp_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
@@ -221,6 +226,11 @@ class PricePredictionModel(Base):
         Index(
             "ix_price_prediction_region_target",
             "market_region",
+            "target_timestamp_utc",
+        ),
+        Index(
+            "ix_price_prediction_origin_target",
+            "forecast_origin_utc",
             "target_timestamp_utc",
         ),
     )
@@ -376,15 +386,78 @@ class AlertModel(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class MonitoringMetricModel(Base):
+    """Structured, queryable model/data-health observation."""
+
+    __tablename__ = "monitoring_metrics"
+    __table_args__ = (
+        Index("ix_monitoring_scope_time", "metric_scope", "observed_at_utc"),
+        Index("ix_monitoring_model_time", "model_name", "observed_at_utc"),
+    )
+    id: Mapped[int] = mapped_column(primary_key=True)
+    observed_at_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
+    metric_scope: Mapped[str] = mapped_column(String(32), index=True)
+    subsystem: Mapped[str] = mapped_column(String(64), default="general")
+    metric_name: Mapped[str] = mapped_column(String(96), index=True)
+    metric_value: Mapped[float | None] = mapped_column(Float, nullable=True)
+    threshold: Mapped[float | None] = mapped_column(Float, nullable=True)
+    status: Mapped[str] = mapped_column(String(24), index=True)
+    model_name: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    model_version: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    asset_id: Mapped[str | None] = mapped_column(String(64), nullable=True, index=True)
+    reference_start: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    reference_end: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    current_start: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    current_end: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    sample_count: Mapped[int] = mapped_column(Integer, default=0)
+    details_json: Mapped[str] = mapped_column(Text, default="{}")
+    data_provenance: Mapped[str] = mapped_column(String(32), default="DERIVED")
+
+
+def create_database_engine(database_url: str | None = None, **overrides: Any) -> Engine:
+    """Create a dialect-aware engine without ever logging credentials."""
+
+    url = database_url or os.getenv("DATABASE_URL") or "sqlite:///data/besspulse.db"
+    parsed = make_url(url)
+    options: dict[str, Any] = {"pool_pre_ping": True}
+    if parsed.get_backend_name() == "sqlite":
+        options["connect_args"] = {"check_same_thread": False}
+    elif parsed.get_backend_name() == "postgresql":
+        options.update(pool_size=5, max_overflow=10, pool_recycle=1800)
+        options["connect_args"] = {"connect_timeout": 10}
+    options.update(overrides)
+    return create_engine(url, **options)
+
+
+def safe_database_label(database_url: str | None = None) -> str:
+    """Return a credential-free backend/database label suitable for logs."""
+
+    parsed = make_url(database_url or os.getenv("DATABASE_URL") or "sqlite:///data/besspulse.db")
+    return f"{parsed.get_backend_name()}:{parsed.database or '<default>'}"
+
+
+def assert_test_database(database_url: str) -> None:
+    """Refuse destructive PostgreSQL tests unless the database is clearly disposable."""
+
+    parsed = make_url(database_url)
+    if parsed.get_backend_name() != "postgresql":
+        return
+    database = (parsed.database or "").lower()
+    host = (parsed.host or "").lower()
+    safe = "test" in database or host in {"localhost", "127.0.0.1"}
+    if not safe:
+        raise ValueError("Destructive tests require a PostgreSQL test database.")
+
+
 def create_session_factory(database_url: str | None = None) -> sessionmaker[Session]:
     """Build a session factory for SQLite locally or PostgreSQL later."""
 
     url: str = database_url or os.getenv("DATABASE_URL") or "sqlite:///data/besspulse.db"
-    engine = create_engine(url)
+    engine = create_database_engine(url)
     return sessionmaker(bind=engine, expire_on_commit=False)
 
 
 def create_schema(database_url: str | None = None) -> None:
     url: str = database_url or os.getenv("DATABASE_URL") or "sqlite:///data/besspulse.db"
-    engine = create_engine(url)
+    engine = create_database_engine(url)
     Base.metadata.create_all(engine)

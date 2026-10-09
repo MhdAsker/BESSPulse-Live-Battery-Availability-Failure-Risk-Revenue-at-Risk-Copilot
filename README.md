@@ -1,126 +1,174 @@
 # BESSPulse
 
-BESSPulse is a provenance-aware research system for studying operational underperformance in grid-scale battery energy storage. It combines a configurable 20 MW / 40 MWh reduced-order digital twin, ENTSO-E DE-LU market ingestion, causal feature engineering, expected-behavior models, requested-power delivery-risk classification, and component anomaly detection.
+## Live Battery Availability, Failure-Risk & Revenue-at-Risk Copilot
 
-## Current scope
+[![CI](https://github.com/MhdAsker/BESSPulse-Live-Battery-Availability-Failure-Risk-Revenue-at-Risk-Copilot/actions/workflows/ci.yml/badge.svg)](https://github.com/MhdAsker/BESSPulse-Live-Battery-Availability-Failure-Risk-Revenue-at-Risk-Copilot/actions/workflows/ci.yml)
 
-Implemented capabilities include:
+BESSPulse is a provenance-aware research and portfolio platform for grid-scale battery operations.
 
-- A site -> PCS -> rack simulator with ten deterministic fault families.
-- Immutable observable telemetry and separately stored synthetic fault ground truth.
-- Secure ENTSO-E ingestion, raw XML retention, UTC normalization, and idempotent persistence.
-- Causal site, rack, market, and leave-one-out peer features with content-addressed snapshots.
-- Healthy-behavior expected site-power and rack-temperature regressors.
-- Naive, Ridge, Random Forest, and LightGBM comparison using chronological validation only.
-- Target-free inference, provenance-aware storage, causal residual persistence, and expanding-window historical residuals.
-- Censored 6/12/24-hour delivery-failure targets with horizon-specific purge gaps.
-- Logistic Regression, Random Forest, LightGBM, and XGBoost classification, calibration, ablations, and SHAP explanations.
-- Engineering, robust-peer, Isolation Forest, residual, and transparent vote anomaly detectors with interval-to-event evaluation.
-- Deterministic rack/PCS/site availability with separate technical, directional power, directional energy, and requested-power capability.
+- Configurable BESS digital twin and deterministic fault injection
+- Calibrated 6/12/24-hour delivery-risk experiments
+- Multi-detector anomaly and early-warning analysis
+- Directional MW/MWh availability
+- Real ENTSO-E DE-LU market ingestion and price forecasting
+- CVXPY healthy-versus-current Revenue-at-Risk benchmark
+- FastAPI, Streamlit, RAG, MLflow, and model/data monitoring
 
-Commercial Revenue-at-Risk, alert prioritization, and the typed FastAPI delivery layer are
-implemented. Dashboards, monitoring, RAG, and agents are not implemented yet.
+> **Demo boundary:** BESS telemetry is simulated. ENTSO-E observations are real only when actually fetched. Revenue-at-Risk is counterfactual and is not actual commercial P&L.
 
-## Provenance and scientific boundary
+## Overview
 
-Battery telemetry is `SIMULATED`; ENTSO-E observations are `REAL`; engineered features and residuals are `DERIVED`; fitted-model outputs are `MODEL_PREDICTION`. Fault truth may select healthy rows for offline experimental training and annotate evaluation, but it never enters model predictors or production inference.
+The system joins reliability engineering, chronological machine learning, deterministic capability calculations, and market context without hiding their different evidence classes. The API serves persisted results; public reads never retrain models, reindex documents, run large optimization jobs, or download market history.
 
-Expected-behavior models estimate normal behavior. Delivery-risk models estimate future telemetry-defined delivery failure, not fault identity. None declares anomalies or provides operating instructions. See [TARGET_DEFINITION.md](TARGET_DEFINITION.md), [ML_METHODOLOGY.md](ML_METHODOLOGY.md), [MODEL_CARD.md](MODEL_CARD.md), and [FEATURE_DICTIONARY.md](FEATURE_DICTIONARY.md).
+## Why it exists
 
-## Reproduction
+Operators need to distinguish four questions: what the asset can physically deliver, whether observed behavior is unusual, whether a future request is at risk, and what the capability gap could mean commercially. BESSPulse keeps those questions separate while presenting them in one operator interface.
 
-Requires Python 3.12:
+## Architecture
+
+The full data flow is documented in [ARCHITECTURE.md](ARCHITECTURE.md). In summary:
+
+```mermaid
+flowchart LR
+    SIM[Simulated BESS] --> TEL[Telemetry]
+    ENT[Real ENTSO-E] --> MKT[Market data]
+    TEL --> FEAT[Causal features]
+    FEAT --> ML[Expected behavior / risk / anomaly]
+    TEL --> AV[Deterministic availability]
+    MKT --> PRICE[Price forecasts]
+    ML --> ALERT[Transparent alerts]
+    AV --> COMM[CVXPY commercial benchmark]
+    PRICE --> COMM
+    ALERT --> DB[(PostgreSQL / SQLite)]
+    COMM --> DB
+    DB --> API[FastAPI]
+    DOCS[Approved docs] --> RAG[RAG index]
+    RAG --> COP[Grounded Copilot]
+    API --> COP
+    API --> UI[Streamlit]
+    COP --> UI
+    ML --> MLF[MLflow]
+    DB --> MON[Monitoring]
+    MON --> UI
+```
+
+## Data provenance
+
+| Label | Meaning |
+|---|---|
+| `SIMULATED` | Digital-twin BESS telemetry and injected scenarios |
+| `REAL` | Externally observed ENTSO-E data |
+| `DERIVED` | Deterministic features, residuals, availability, and monitoring |
+| `MODEL_PREDICTION` | Fitted-model output |
+| `COUNTERFACTUAL` | Hypothetical optimized commercial benchmark |
+| `AI-GENERATED EXPLANATION` | Optional synthesized explanation; evidence keeps its original label |
+
+Fault ground truth is evaluation-only and is never exposed as operational evidence.
+
+## Key capabilities
+
+The simulator supports configurable power, energy, PCS/rack topology, five-minute telemetry, deterministic seeds, and ten transparent fault families. Feature generation uses causal windows, backward-only market alignment, and leave-one-out peer statistics. Expected-power and expected-temperature models produce walk-forward residuals. Delivery-risk targets use `(T, T+h]` semantics, censoring, horizon-specific purge gaps, and chronological splits.
+
+## ML methodology
+
+Model selection uses training and validation periods; the test period is evaluated once. Preprocessing is fit on training data only. Dataset, feature-set, artifact, target, and model versions are retained. See [ML_METHODOLOGY.md](ML_METHODOLOGY.md), [MODEL_CARD.md](MODEL_CARD.md), and [TARGET_DEFINITION.md](TARGET_DEFINITION.md).
+
+The simulated 24-hour delivery-risk model has known poor out-of-time calibration. That limitation remains visible in MLflow metadata, monitoring, alerts, API responses, and the dashboard.
+
+## Anomaly detection
+
+Engineering rules, robust peer comparisons, Isolation Forest, residual detectors, and a transparent vote ensemble remain separate. Anomaly scores are not probabilities. Evaluation reports event detection rate, false alerts per healthy day, and detection delay. See [docs/ANOMALY_DETECTION.md](docs/ANOMALY_DETECTION.md).
+
+## Availability
+
+Availability is deterministic and distinguishes technical state, charge/discharge power, deliverable energy, charge headroom, and current requested-power sufficiency. See [AVAILABILITY_DEFINITIONS.md](AVAILABILITY_DEFINITIONS.md).
+
+## Market data
+
+ENTSO-E ingestion preserves immutable source XML, UTC-normalized observations, content hashes, bounded retries, and `REAL` provenance. Price forecasts use timestamp-based causal lags and chronological evaluation. See [docs/ENTSOE_INTEGRATION.md](docs/ENTSOE_INTEGRATION.md) and [docs/PRICE_FORECASTING.md](docs/PRICE_FORECASTING.md).
+
+## Revenue-at-Risk
+
+CVXPY/HiGHS compares healthy and current constrained dispatch. Outputs are `COUNTERFACTUAL`: **Counterfactual historical simulation, not actual commercial P&L.** Attribution is diagnostic decomposition, not causal proof. See [REVENUE_AT_RISK.md](REVENUE_AT_RISK.md).
+
+## AI Copilot and RAG
+
+Approved-document retrieval is available with stable source/section citations. Documentation defines methodology; structured tools must control current state. This repository does not contain the previously expected Prompt 13 Gemini operational-tool agent, so current-state questions are refused rather than guessed. Gemini remains optional. See [docs/COPILOT.md](docs/COPILOT.md) and [docs/RAG.md](docs/RAG.md).
+
+## Monitoring
+
+Monitoring covers freshness, data quality, PSI/Wasserstein drift, residual behavior, prediction distributions, mature-label performance, 24-hour rolling Brier score, and artifact integrity. Drift is model/data change, not a battery fault. See [docs/MODEL_MONITORING.md](docs/MODEL_MONITORING.md).
+
+## Screenshots
+
+The ten-page dark operations dashboard includes Fleet Overview, Live Asset, Rack Heatmap, ML Health, Delivery Risk, Market Context, Revenue-at-Risk, Alerts, AI Copilot, and Model Monitoring. Screenshots are intentionally not fabricated; add captured public-demo images under `docs/images/` after deployment.
+
+## Local setup
+
+Python 3.12 is required.
 
 ```powershell
 python -m venv .venv
 .venv\Scripts\python -m pip install -e ".[dev]"
-.venv\Scripts\python -m pytest
-.venv\Scripts\python -m ruff check .
-.venv\Scripts\python -m mypy src
+Copy-Item .env.example .env
+alembic upgrade head
 ```
 
-## API
-
-Start the service with `uvicorn api.main:app --reload`. Then inspect `/api/v1/health`,
-`/api/v1/assets`, `/api/v1/assets/BESS-001/status`,
-`/api/v1/assets/BESS-001/delivery-risk`, and `/api/v1/alerts`. Reads return persisted outputs and
-never train models or launch commercial optimization. Missing persisted analytics return a
-controlled 503. Simulation controls default off; Copilot is intentionally unavailable. See
-[`docs/API.md`](docs/API.md).
-
-## Live Demo / Dashboard
-
-Run FastAPI in Terminal 1:
+Terminal 1:
 
 ```powershell
-uvicorn api.main:app --host 127.0.0.1 --port 8000
+python -m uvicorn api.main:app --host 127.0.0.1 --port 8000
 ```
 
-Run Streamlit in Terminal 2:
+Terminal 2:
 
 ```powershell
-streamlit run dashboard/app.py --server.address 127.0.0.1 --server.port 8501
+python -m streamlit run dashboard/app.py --server.address 127.0.0.1 --server.port 8501
 ```
 
-Open [http://127.0.0.1:8501](http://127.0.0.1:8501/). The ten-page industrial operations UI is
-API-first. History-only panels can use an explicitly labeled local persisted-artifact demo mode;
-dashboard startup never retrains models. See [`docs/DASHBOARD.md`](docs/DASHBOARD.md).
+Open `http://127.0.0.1:8501`. API documentation is at `http://127.0.0.1:8000/docs`.
 
-Generate simulator-backed expected-behavior artifacts using the documented seed and duration:
+## Environment variables
+
+Copy [.env.example](.env.example) and populate only what the selected service needs. Production API requires a PostgreSQL `DATABASE_URL`, explicit CORS origins, and disabled simulation controls. Streamlit needs only `BESSPULSE_API_URL` and presentation settings. ENTSO-E, Gemini, MLflow, and RAG are optional subsystems and do not block core startup. Never put backend credentials in Streamlit secrets or browser code.
+
+## Testing
 
 ```powershell
-python -m models.experiment --output artifacts/models --intervals 180
+pytest -q
+ruff check .
+ruff format --check .
+mypy src api dashboard
+python scripts/check_secrets.py
 ```
 
-This writes machine-generated comparisons, trusted-local joblib artifacts, metadata, and prediction/residual Parquet files. Optional figures are available through `models.plots` after installing `.[plots]`.
+Live ENTSO-E, Gemini, and PostgreSQL tests remain opt-in.
 
-Run the 14-day seed-42 delivery-risk experiment without network access:
+## Docker
 
 ```powershell
-python -m models.delivery_risk.experiment --intervals 4032
+docker compose up --build
 ```
 
-Outputs are written under `artifacts/models/delivery_risk/` and `reports/delivery_risk/`. The latest simulated run selected Random Forest for all horizons. Its 6-hour test PR-AUC was 0.8368, while 12-hour performance was modest and 24-hour calibration was poor; these are not real-BESS validation results.
+The compose stack runs PostgreSQL, an explicit Alembic migration job, FastAPI, and Streamlit as separate services. Both application images run as a non-root user. See [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
 
-Run the separate 10-day seed-42 anomaly experiment:
+## Deployment
 
-```powershell
-python -m models.anomaly.experiment
-```
-
-Outputs are isolated under `artifacts/models/anomaly/` and `reports/anomaly/`. On six high-severity simulated test faults, Isolation Forest detected 5/6 but generated 17.18 false alert events per healthy day. Engineering, residual, and vote detectors each detected 2/6 with zero false alerts/day; robust peer detected 0/6. All BESS telemetry and injected faults are simulated, and no real commercial-BESS validation has occurred. Prompt 5's 24-hour probability remains poorly calibrated out of time and is descriptive context only.
-
-Run the deterministic availability experiment:
-
-```powershell
-python -m availability.experiment
-```
-
-Availability is not one generic percentage. BESSPulse separately reports component technical state, charge/discharge MW, deliverable discharge MWh, charge headroom, and capability relative to the current request. The latest simulated run produced mean technical availability 0.99922, mean discharge power availability 0.99484, and mean discharge energy availability 0.45448. All modest requests were capability-supportable, while observed delivery still failed on 3.75% of active intervals. Definitions are in [AVAILABILITY_DEFINITIONS.md](AVAILABILITY_DEFINITIONS.md); machine results are under `reports/availability/`.
-
-Generate causal features from already persisted data with `python -m features.build --start 2026-01-01 --end 2026-01-08 --asset-id BESS-001`. Neither command requires live ENTSO-E access. Configuration defaults are in `configs/default.yaml`; secrets such as `ENTSOE_API_TOKEN` belong only in the environment.
+`render.yaml` describes separate API and dashboard services. `.github/workflows/ci.yml` performs quality, migration, secret, PostgreSQL, and image checks; deployment hooks live in the separate deployment workflow. Platform secrets must supply production values. No public deployment URL is claimed until externally verified.
 
 ## Limitations
 
-This is a short-horizon, single-asset synthetic research baseline, not a calibrated electrochemical or production BESS model. It omits cell balancing, voltage dynamics, grid-control transients, auxiliary loads, reactive power, and real-site validation. Fault magnitudes are transparent synthetic assumptions.
-## Price forecasting
+- Single-asset synthetic BESS validation; no real-site predictive validation.
+- No authentication or tenant isolation; intended public mode is read-only portfolio/demo use.
+- Prompt 13 operational Gemini agent/tool orchestration is absent.
+- Local RAG is suitable for the small document corpus; pgvector is not implemented.
+- Model artifacts are generated outside Git and need an explicit production artifact strategy.
+- Monitoring thresholds are project assumptions, not universal statistical standards.
 
-The compact Prompt 8 module forecasts DE-LU day-ahead prices for a timestamp-defined next 24
-hours using exact 24h/168h lags, market-local calendar fields, rolling price history, transparent
-baselines, and a deterministic LightGBM candidate. Selection is chronological and validation-only;
-walk-forward results, negative/high-price behavior, quantiles, artifacts, and provenance are
-reported under `reports/price_forecast/` and `artifacts/models/price/`. See
-[`docs/PRICE_FORECASTING.md`](docs/PRICE_FORECASTING.md). Market forecasting remains supporting
-context for battery reliability and future commercial-impact work.
-## Revenue at Risk
+## Roadmap
 
-BESSPulse now converts deterministic capability loss into a healthy-versus-current optimized
-market-value difference using CVXPY and HiGHS. It is a counterfactual benchmark, **not actual
-commercial P&L**. Historical perfect-hindsight and forecast-price modes remain separate. See
-[`REVENUE_AT_RISK.md`](REVENUE_AT_RISK.md).
-## Alerts
+Real-site shadow validation, authenticated role-based operations, durable production artifacts, pgvector if corpus scale warrants it, and independently governed alert/model retraining workflows.
 
-Alerts combine delivery-risk predictions, anomaly evidence, deterministic MW/MWh impact, and
-counterfactual commercial context through a bounded, documented formula. They are transparent
-decision support—not a black-box ranking model. The 24h risk horizon is deliberately downweighted
-because of poor out-of-time calibration. See [`ALERT_INTERPRETATION.md`](ALERT_INTERPRETATION.md).
+## License
+
+No license has been selected. All rights remain with the repository owner until a license is added.

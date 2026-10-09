@@ -1,5 +1,7 @@
 # Data provenance
 
+Monitoring observations use `DERIVED` provenance and retain reference/current windows and sample counts. RAG chunks retain repository-relative document path, section, source version, and deterministic content hash. MLflow run metadata must contain only sanitized lineage fields and must never include environment secrets.
+
 | Value | Meaning |
 |---|---|
 | `REAL` | Directly acquired external observation, such as ENTSO-E data |

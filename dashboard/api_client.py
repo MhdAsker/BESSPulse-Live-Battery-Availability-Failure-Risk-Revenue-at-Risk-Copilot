@@ -12,6 +12,7 @@ from api.schemas.commercial import RevenueRiskResponse
 from api.schemas.copilot import CopilotQueryResponse
 from api.schemas.health import HealthResponse
 from api.schemas.market import MarketLatestResponse
+from api.schemas.monitoring import MonitoringResponse
 from api.schemas.racks import RackResponse
 from api.schemas.risk import DeliveryRiskResponse
 from pydantic import BaseModel, TypeAdapter, ValidationError
@@ -75,6 +76,9 @@ class BESSPulseAPIClient:
 
     def market_latest(self) -> MarketLatestResponse:
         return self._get("/market/latest", MarketLatestResponse)
+
+    def monitoring(self, **filters: Any) -> MonitoringResponse:
+        return self._get("/monitoring", MonitoringResponse, params=_clean(filters))
 
     def copilot_query(
         self, asset_id: str, query: str, conversation_id: str | None = None

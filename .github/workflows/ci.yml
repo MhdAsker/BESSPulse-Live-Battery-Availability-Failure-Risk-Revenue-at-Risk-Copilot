@@ -1,0 +1,79 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: besspulse_test
+          POSTGRES_USER: besspulse
+          POSTGRES_PASSWORD: ci_only_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U besspulse -d besspulse_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install --upgrade pip
+      - run: python -m pip install -e ".[dev]"
+      - name: Secret scan
+        run: python scripts/check_secrets.py
+      - name: Ruff
+        run: ruff check .
+      - name: Format
+        run: ruff format --check .
+      - name: Mypy
+        run: mypy src api dashboard
+      - name: Unit and integration tests
+        run: pytest -q
+      - name: SQLite migration upgrade and drift check
+        env:
+          DATABASE_URL: sqlite:///ci_migration.db
+        run: |
+          alembic upgrade head
+          alembic check
+      - name: PostgreSQL migration and guarded integration test
+        env:
+          DATABASE_URL: postgresql+psycopg://besspulse:ci_only_password@localhost:5432/besspulse_test
+          DATABASE_URL_TEST: postgresql+psycopg://besspulse:ci_only_password@localhost:5432/besspulse_test
+          RUN_POSTGRES_TESTS: "1"
+        run: |
+          alembic upgrade head
+          pytest -q -m postgres
+
+  docker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: Build FastAPI image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: false
+          tags: besspulse-api:ci
+      - name: Build Streamlit image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.dashboard
+          push: false
+          tags: besspulse-dashboard:ci

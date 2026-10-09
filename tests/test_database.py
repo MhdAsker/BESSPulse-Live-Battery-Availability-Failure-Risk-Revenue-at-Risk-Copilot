@@ -15,6 +15,7 @@ def test_database_foundation_defines_required_tables() -> None:
         "fault_ground_truth",
         "market_data",
         "model_predictions",
+        "monitoring_metrics",
         "pcs",
         "pcs_telemetry",
         "price_predictions",

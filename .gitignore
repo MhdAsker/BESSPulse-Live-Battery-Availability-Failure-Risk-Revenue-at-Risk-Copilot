@@ -1,4 +1,6 @@
 .env
+.env.*
+!.env.example
 .venv/
 __pycache__/
 *.py[cod]
@@ -14,3 +16,16 @@ artifacts/models/
 dist/
 build/
 *.egg-info/
+mlruns/
+mlruns.db
+.rag/
+*.faiss
+.coverage
+htmlcov/
+coverage.xml
+.idea/
+.vscode/
+.DS_Store
+.streamlit/secrets.toml
+*.tmp
+*.log

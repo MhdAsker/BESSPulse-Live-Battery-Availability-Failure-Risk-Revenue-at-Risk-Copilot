@@ -1,5 +1,7 @@
 # Project plan
 
+Prompt 14 covers migration-governed PostgreSQL readiness, approved-document retrieval, local MLflow tracking, and model/data monitoring. Containerization, hosted scheduling, cloud deployment, and production authentication remain Prompt 15 scope.
+
 ## Phase 1 - implemented
 
 - Typed configuration, 20 MW / 40 MWh site -> PCS -> rack simulator, ten fault families, isolated fault truth, SQLAlchemy persistence, and behavioral tests.
@@ -90,3 +92,25 @@ power-flow animation, 32-rack grouped heatmap, risk/calibration and commercial d
 console, honest Copilot and model-monitoring shells, auto-refresh/timezone/session state, tests,
 documentation, and live runtime smoke verification. Agent reasoning, RAG, monitoring services,
 authentication, Docker, and deployment remain later work.
+
+## Prompt 13 — unavailable in repository history
+
+The expected Gemini operational-agent phase is not present in this checkout. Prompt 14/15 retain
+the existing safe Copilot compatibility endpoint: approved-document retrieval is citation-backed,
+operational-only questions fail closed, and no missing agent behavior is represented as complete.
+
+## Prompt 14 — recovered and complete
+
+Added Alembic-governed SQLite/PostgreSQL schema management, guarded PostgreSQL test support,
+explicit local RAG indexing and cited retrieval, optional local MLflow instrumentation, persisted
+freshness/model-monitoring contracts, monitoring API/dashboard views, and supporting tests and
+documentation. Runtime never rebuilds the RAG index or retrains models at web startup.
+
+## Prompt 15 — complete except provider-authorized public deployment
+
+Added production configuration validation, bounded database startup retries, structured request
+logging, safe system metadata, separate non-root API/dashboard containers, PostgreSQL Compose,
+GitHub Actions CI and gated deployment workflows, Render Blueprint configuration, secret scanning,
+operations/deployment/security documentation, and public-demo labeling. Public deployment remains
+an external account operation: provider credentials and deploy hooks are intentionally not stored
+in this repository.

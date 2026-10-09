@@ -14,12 +14,10 @@ router = APIRouter(prefix="/copilot", tags=["copilot"])
 @router.post(
     "/query",
     response_model=CopilotQueryResponse,
-    summary="Query Copilot (not configured in Prompt 11)",
+    summary="Query the optional grounded Copilot",
 )
 def query_copilot(
     request: CopilotQueryRequest,
     service: Annotated[CopilotService, Depends(get_copilot_service)],
 ) -> CopilotQueryResponse:
-    del request
-    service.query()
-    raise AssertionError("unreachable")
+    return service.query(request)

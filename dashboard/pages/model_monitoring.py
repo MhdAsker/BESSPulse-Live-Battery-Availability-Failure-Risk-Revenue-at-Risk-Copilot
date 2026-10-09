@@ -1,4 +1,4 @@
-"""Honest monitoring shell from available artifact metadata."""
+"""Persisted monitoring observations with honest empty-state handling."""
 
 import pandas as pd
 import streamlit as st
@@ -8,6 +8,14 @@ from dashboard.components.cards import metric_card
 from dashboard.context import DashboardContext
 from dashboard.data import ROOT
 from dashboard.utils import format_timestamp
+
+UI_STATUS = {
+    "OK": "HEALTHY",
+    "WARNING": "WATCH",
+    "CRITICAL": "DEGRADED",
+    "INSUFFICIENT_DATA": "INSUFFICIENT DATA",
+    "NOT_AVAILABLE": "INSUFFICIENT DATA",
+}
 
 
 def render(ctx: DashboardContext) -> None:
@@ -59,12 +67,35 @@ def render(ctx: DashboardContext) -> None:
     st.warning(
         "Known limitation: 24h delivery-risk calibration is poor out of time. No real commercial-BESS model validation has occurred."
     )
+    try:
+        observations = ctx.client.monitoring(asset_id=ctx.asset_id, limit=100).items
+    except Exception:
+        observations = ()
+    if observations:
+        st.markdown("### Latest health observations")
+        st.dataframe(
+            pd.DataFrame(
+                {
+                    "Time": format_timestamp(item.observed_at_utc, ctx.timezone),
+                    "Scope": item.metric_scope,
+                    "Metric": item.metric_name,
+                    "Value": item.metric_value,
+                    "Status": UI_STATUS[item.status.value],
+                    "Model": item.model_name or "—",
+                }
+                for item in observations
+            ),
+            hide_index=True,
+            use_container_width=True,
+        )
     sections = st.columns(3)
     for column, title, detail in (
-        (sections[0], "Input drift", "NOT YET ACTIVE"),
-        (sections[1], "Residual drift", "NOT YET ACTIVE"),
-        (sections[2], "Anomaly-score drift", "NOT YET ACTIVE"),
+        (sections[0], "Input drift", "NO DATA" if not observations else "ACTIVE"),
+        (sections[1], "Residual drift", "NO DATA" if not observations else "ACTIVE"),
+        (sections[2], "Prediction health", "NO DATA" if not observations else "ACTIVE"),
     ):
         with column:
-            metric_card(title, detail, "Prompt 14 monitoring scope")
-    st.caption("No drift statistic is inferred or fabricated from currently available diagnostics.")
+            metric_card(title, detail, "Persisted monitoring observations")
+    st.caption(
+        "Missing observations remain explicit; no drift statistic is inferred or fabricated."
+    )

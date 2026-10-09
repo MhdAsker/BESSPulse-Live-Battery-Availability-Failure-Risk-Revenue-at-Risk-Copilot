@@ -1,108 +1,75 @@
-# Architecture
+# BESSPulse architecture
 
-## Implemented data flow
+## System topology
 
-```text
-typed YAML config -> site / PCS / rack simulator -> immutable telemetry
-                               |
-                      separate fault ground truth
-
-ENTSO-E HTTP -> immutable raw XML -> parser / validator -> market records
-
-telemetry + market records -> causal feature modules -> versioned Parquet snapshots
-                                                        |
-                              chronological expected-behavior training
-                                 |                          |
-                       expected site power       expected rack temperature
-                                 |                          |
-                         predictions + causal actual-minus-expected residuals
-                                                        |
-                           curated site-level delivery-risk features
-                                                        |
-                    censored targets -> horizon-specific purged splits
-                                                        |
-                   train -> validation selection -> calibration -> test
-
-telemetry + peer features + leakage-safe residuals
-                 -> healthy-train references / Isolation Forest
-                 -> validation-only threshold + causal persistence
-                 -> rack anomaly intervals -> merged component events
-                 -> evaluation-only matching + transparent site summary
-
-rack telemetry -> rack directional capability -> PCS converter-constrained capability
-               -> site technical / power / energy availability
-               -> requested-power sufficiency -> historical metrics and events
+```mermaid
+flowchart TB
+    SIM[SIMULATED BESS<br/>5-minute telemetry] --> TEL[Observable telemetry]
+    FAULT[Evaluation-only fault truth] -. cohort/evaluation only .-> ML
+    TEL --> FEAT[Causal features]
+    ENT[REAL ENTSO-E] --> MARKET[Normalized market observations]
+    MARKET --> FEAT
+    FEAT --> ML[Expected behavior<br/>6/12/24h delivery risk<br/>anomaly detectors]
+    TEL --> AVAIL[Deterministic technical / MW / MWh availability]
+    MARKET --> PRICE[Causal price forecasts]
+    ML --> ALERTS[Transparent operational alerts]
+    AVAIL --> COMM[CVXPY healthy/current benchmark]
+    PRICE --> COMM
+    COMM --> RAR[COUNTERFACTUAL Revenue-at-Risk]
+    ML --> PG[(PostgreSQL / Supabase<br/>or SQLite development)]
+    AVAIL --> PG
+    ALERTS --> PG
+    RAR --> PG
+    MON[Freshness / drift / maturity / artifact health] <--> PG
+    ML --> MLFLOW[Optional MLflow tracking]
+    DOCS[Approved project documentation] --> RAG[Explicit local RAG index job]
+    PG --> TOOLS[Typed operational query services]
+    TOOLS --> COPILOT[Optional Copilot]
+    RAG --> COPILOT
+    PG --> API[FastAPI]
+    COPILOT --> API
+    API --> UI[Streamlit dashboard]
 ```
 
-`besspulse.config` owns normal system parameters; environment variables are reserved for secrets and the database URL. Stateful rack physics, PCS aggregation, and site request allocation remain independent of persistence. Positive power is discharge and negative power is charge. Telemetry schemas contain observables only, while `ground_truth.py` owns fault schedules and labels.
+## Scientific boundaries
 
-`data.entsoe` separates request construction, bounded retries, immutable raw storage, XML parsing, continuity checks, and normalized persistence. A content hash links each real normalized observation to its source document. Feature modules reject duplicate identities, naive timestamps, leakage columns, and infinities. Rolling calculations are causal, peers are leave-one-out, and market joins are backward-only with finite tolerance.
+- Telemetry contains observables only. Fault truth is isolated in `ground_truth.py` and evaluation datasets.
+- Positive power is discharge; negative power is charge.
+- Features reject duplicate identities, naive timestamps, leakage columns, and infinities. Rolling windows are causal, peer features exclude self, and market joins are backward-only.
+- Expected-behavior residuals used historically are walk-forward: each prediction comes from strictly earlier healthy training rows.
+- Delivery-risk labels use `(T, T+h]`, censor incomplete tails, purge target-window overlap, and keep 6/12/24-hour artifacts independent.
+- Anomaly scores remain detector scores, never failure probabilities.
+- Availability is deterministic and cannot be changed by risk/anomaly context.
+- Revenue-at-Risk is a healthy-versus-current counterfactual benchmark, not actual P&L or causal attribution.
+- Monitoring drift is evidence of distribution change, not evidence of a battery fault.
+- Documentation controls definitions; current structured tool output controls current state.
 
-`models.expected_power` and `models.expected_temperature` separate dataset construction, training, inference, evaluation, and artifacts. Shared model code enforces unique-timestamp chronological splitting, fault-event boundary protection, healthy-cohort training, train-only preprocessing, deterministic candidates, exact inference contracts, and expanding-window historical predictions. Ground truth can select healthy offline rows and annotate diagnostics but never enters `X`.
+## Runtime services
 
-`ModelPredictionModel` stores optional actuals and residuals beside predictions while preserving distinct `MODEL_PREDICTION` and `DERIVED` provenance. Artifacts are local joblib pipelines plus JSON metadata; only trusted project artifacts may be loaded. `dashboard/` remains a placeholder.
+FastAPI is a read-oriented delivery layer over persisted outputs. Public GET routes never train models, run large optimization, reindex RAG, or fetch market history. Simulation mutation routes are omitted entirely in production mode. Request-scoped SQLAlchemy sessions use one ORM for SQLite and PostgreSQL; PostgreSQL uses bounded pools compatible with transaction poolers and avoids session-affinity assumptions.
 
-`models.delivery_risk` isolates telemetry-derived targets from causal features, builds independent 6/12/24-hour datasets, purges target-window overlap at every partition boundary, fits preprocessing on train only, selects classifiers on validation, calibrates on a later block, and evaluates test once. Probability artifacts keep horizon-specific contracts and are never substituted across horizons.
+Streamlit owns presentation, caching, navigation, formatting, and session state. It receives only an API base URL. It does not receive database, ENTSO-E, Gemini, or Supabase server credentials. An explicitly labeled local-artifact adapter supports development demonstrations only.
 
-`models.anomaly` separates engineering, robust peer, Isolation Forest, residual, ensemble, event construction, evaluation, artifact, storage, and plotting concerns. Ground truth is cohort/evaluation metadata only. Rack evidence remains primary; site summaries expose counts/maxima rather than an opaque priority score. `anomaly_events` stores component events without commercial priority fields.
+The Copilot compatibility layer supports approved-document retrieval and citations. Prompt 13's expected Gemini operational-tool agent is absent, so operational-only questions fail safely and mixed questions are labeled partial. The RAG index is refreshed by an explicit job and is never rebuilt at API startup.
 
-`availability` is deterministic and has no ML dependency. It retains charge/discharge direction, installed-denominator unknown handling, PCS/rack conservation, and AC-facing energy semantics. Delivery-risk and anomaly outputs are adjacent contextual joins only and cannot change capability. `availability_snapshots` is unique by asset and timestamp.
+## Deployment topology
 
-## Deliberate decisions
-
-- Half-open fault windows `[start, end)` remove boundary ambiguity.
-- Site requests are allocated by current component capability.
-- Expected power uses one model with non-ordinal operating mode rather than separate charge/discharge models.
-- Rack and PCS identities are metadata, not temperature predictors.
-- Selection uses validation RMSE and chooses the simplest candidate within a fixed 2% tolerance.
-- Test data are evaluated after selection and never influence the chosen model.
-- Historical residual features use only models trained on strictly earlier healthy rows.
-## Price forecasting boundary
-
-`models.price.dataset` owns causal UTC feature construction and the price-specific leakage guard;
-`baselines`, `train`, `quantiles`, and `evaluate` own modeling; `predict` owns origin-aware output;
-`backtest` owns expanding-window replay; and `storage` owns idempotent `price_predictions` writes.
-The package consumes normalized ENTSO-E observations but never imports battery, availability,
-anomaly, or delivery-risk features. Artifacts use the existing trusted-local model contract.
-## Commercial flow
-
-`REAL / MODEL_PREDICTION price + DERIVED deterministic availability → CVXPY/HiGHS dispatch →
-healthy and current COUNTERFACTUAL benchmarks → RevenueAtRisk → non-causal restoration
-attribution`. Risk and anomaly outputs remain context outside physical constraints.
-## Alert flow
-
-`telemetry/features → expected behavior + delivery risk + anomaly + availability + commercial
-benchmark → structured evidence → transparent priority → lifecycle alert`. Ground truth is outside
-generation and enters only replay evaluation.
-
-## API delivery layer
-
-```text
-database + existing domain services
-                 |
-        API-facing query services
-                 |
-      typed FastAPI /api/v1 routes
-                 |
-       future dashboard / agents
+```mermaid
+flowchart LR
+    JOB[Alembic pre-deploy job] --> DB[(PostgreSQL / Supabase)]
+    API[BESSPulse API container<br/>non-root] --> DB
+    UI[BESSPulse dashboard container<br/>non-root] --> API
+    CRON[Platform scheduled jobs] --> DB
+    CRON --> RAG[(RAG index / persistent storage)]
+    TRAIN[Offline training jobs] --> ART[(Trusted model artifacts)]
+    TRAIN --> MLF[MLflow]
+    API -. readiness check .-> ART
 ```
 
-FastAPI is a delivery layer. Request-scoped sessions perform bounded latest-row and event queries;
-application lifespan owns reusable simulation/Copilot services. Routes contain no scientific or ML
-calculations. GET revenue risk returns the latest persisted benchmark and cannot invoke CVXPY.
-Missing optional analytics degrade individual endpoints, while Copilot absence does not make the
-core API unready. Composite indexes support asset/rack time queries and alert filtering.
+API and dashboard deploy independently. The production migration is an explicit release/pre-deploy command. Training and scheduled analytics do not run inside web workers. Container healthchecks use process liveness only; readiness separately reports database and model/data state.
 
-## Dashboard delivery layer
+## Persistence and observability
 
-```text
-domain / persistence → FastAPI typed contracts → dashboard API client → Streamlit pages
-                                                ↘ explicit local artifact demo adapter
-```
+Alembic owns schema evolution. The baseline migration covers telemetry, market observations, predictions, anomaly events, availability, commercial outputs, alerts, and monitoring records. Composite indexes follow API access patterns.
 
-The normal path is API-driven. Streamlit owns presentation, navigation, caching, formatting,
-timezone display, and session state only. The isolated demo adapter selects existing persisted
-reports for historical charts and the rack grid when no matching aggregate API exists; it is
-visibly labeled and cannot train, infer, optimize, calculate availability, or prioritize alerts.
-Reusable components centralize theme, Plotly layout, provenance badges, cards, battery/power-flow
-animation, grouped rack tiles, status strips, loading, and empty/error states.
+Production logs are JSON with timestamp, level, service, event, request ID, method, path, status, and duration where applicable. URLs and secrets are excluded. `/api/v1/health/live` checks the process, `/api/v1/health/ready` checks the database, and `/api/v1/system/info` exposes only safe version/backend metadata.

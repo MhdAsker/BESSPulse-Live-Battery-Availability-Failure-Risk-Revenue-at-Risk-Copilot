@@ -6,6 +6,7 @@ battery, ML, availability, optimization, or alert-priority calculations.
 
 import json
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from threading import Lock
 from typing import Any
 from uuid import UUID, uuid4
@@ -22,6 +23,7 @@ from api.schemas.assets import AssetStatus, AssetSummary
 from api.schemas.availability import AvailabilityResponse
 from api.schemas.commercial import CommercialAttributionResponse, RevenueRiskResponse
 from api.schemas.common import Freshness, Provenance, ProvenanceType
+from api.schemas.copilot import CopilotQueryRequest, CopilotQueryResponse
 from api.schemas.market import (
     DerivedMarketFields,
     ForecastMarketFields,
@@ -817,8 +819,49 @@ class SimulationService:
 
 
 class CopilotService:
-    def query(self) -> None:
-        raise FeatureUnavailableError("AI Copilot is not configured.")
+    def __init__(self, enabled: bool = False) -> None:
+        self.enabled = enabled
+
+    def query(self, request: CopilotQueryRequest) -> CopilotQueryResponse:
+        if not self.enabled:
+            raise FeatureUnavailableError("AI Copilot is not configured.")
+        from besspulse.agents.knowledge import QueryRoute, route_query
+        from rag.service import KnowledgeService
+
+        route = route_query(request.query)
+        if route == QueryRoute.OPERATIONAL_TOOL:
+            raise FeatureUnavailableError(
+                "Prompt 13 operational Copilot tools are not present; "
+                "current state was not inferred from documentation."
+            )
+        result = KnowledgeService().search_knowledge_base(request.query)
+        if not result.citations:
+            return CopilotQueryResponse(status="NO_EVIDENCE", answer=None)
+        citations = tuple(
+            f"[{item.source_path} - {item.heading}] relevance={score:.3f} id={item.citation_id}"
+            for item, score in zip(result.citations, result.scores, strict=True)
+        )
+        answer = "\n\n".join(item.excerpt for item in result.citations[:2])
+        status = "GROUNDED_RETRIEVAL"
+        if route == QueryRoute.MIXED:
+            status = "PARTIAL_GROUNDED_RETRIEVAL"
+            answer = (
+                "Current operational evidence is unavailable because Prompt 13 tools are absent. "
+                "Documentation context follows; it does not represent current asset state.\n\n"
+                f"{answer}"
+            )
+        return CopilotQueryResponse(
+            status=status,
+            answer=answer,
+            citations=citations,
+            tool_calls=(
+                {
+                    "tool": "search_knowledge_base",
+                    "arguments": {"query": request.query},
+                    "result_count": len(result.citations),
+                },
+            ),
+        )
 
 
 class HealthService:
@@ -836,8 +879,22 @@ class HealthService:
             "commercial": self._table_status(RevenueAtRiskModel),
             "market_data": self._table_status(MarketDataModel),
             "copilot": "optional_unavailable",
+            "model_artifacts": self._artifact_status(),
         }
         return checks
+
+    @staticmethod
+    def _artifact_status() -> str:
+        root = Path(__file__).resolve().parents[1] / "artifacts" / "models"
+        required = (
+            root / "expected_power" / "metadata.json",
+            root / "expected_temperature" / "metadata.json",
+            root / "delivery_risk" / "6h" / "metadata.json",
+            root / "delivery_risk" / "12h" / "metadata.json",
+            root / "delivery_risk" / "24h" / "metadata.json",
+            root / "price" / "metadata.json",
+        )
+        return "available" if all(path.is_file() for path in required) else "unavailable"
 
     def _table_status(self, model: type[Any]) -> str:
         count = self.session.scalar(select(func.count()).select_from(model)) or 0

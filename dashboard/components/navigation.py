@@ -25,6 +25,7 @@ def sidebar(health: dict[str, Any] | None, assets: list[dict[str, Any]]) -> str:
     with st.sidebar:
         st.markdown("## ⚡ BESSPulse")
         st.caption("OPERATIONS INTELLIGENCE")
+        st.caption("Demo: simulated BESS telemetry + real ENTSO-E market data.")
         online = health is not None
         health_status = str(health.get("status", "offline")) if health else "offline"
         css = "bp-status-dot" if online else ""

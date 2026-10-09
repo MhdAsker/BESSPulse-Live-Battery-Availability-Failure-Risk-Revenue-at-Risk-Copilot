@@ -14,6 +14,7 @@ from dashboard.utils import format_eur, format_number, format_percent, operation
 
 def render(ctx: DashboardContext) -> None:
     st.markdown("## Fleet Overview")
+    st.info("BESSPulse demo uses simulated BESS telemetry and real ENTSO-E market data.")
     status, _ = ctx.fetch(lambda: ctx.client.asset_status(ctx.asset_id), lambda: {}, "Asset status")
     availability, demo_av = ctx.fetch(
         lambda: ctx.client.availability(ctx.asset_id), ctx.local.latest_availability, "Availability"

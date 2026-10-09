@@ -1,5 +1,7 @@
 # BESSPulse ML methodology
 
+Experiment lineage can be recorded through `ExperimentTracker`, including actual computed metrics, dataset/feature/target versions, time splits, seed, artifact version, and Git revision. Missing metrics are omitted, never synthesized. Monitoring reference distributions must be drawn from training or another validated historical baseline, never future/current samples.
+
 ## Scientific objective
 
 These regressors estimate healthy expected site power and rack temperature under observable operating conditions. They are not fault, anomaly, or delivery-risk classifiers. Predictions are `MODEL_PREDICTION`; actual-minus-prediction residuals and evaluation metrics are `DERIVED`.
