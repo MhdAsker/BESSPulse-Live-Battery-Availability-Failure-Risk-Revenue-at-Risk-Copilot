@@ -62,18 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: docker/setup-buildx-action@v3
       - name: Build FastAPI image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile
-          push: false
-          tags: besspulse-api:ci
+        run: docker build --tag besspulse-api:ci --file Dockerfile .
       - name: Build Streamlit image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          file: Dockerfile.dashboard
-          push: false
-          tags: besspulse-dashboard:ci
+        run: docker build --tag besspulse-dashboard:ci --file Dockerfile.dashboard .
