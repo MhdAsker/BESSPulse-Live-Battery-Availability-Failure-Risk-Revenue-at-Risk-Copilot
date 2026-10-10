@@ -49,7 +49,7 @@
     "start_timestamp_utc": "2025-01-01T23:00:00Z"
   },
   "forecast_information_set": "Prompt 8 MODEL_PREDICTION point forecast",
-  "forecast_record_written": true,
+  "forecast_record_written": false,
   "historical": {
     "asset_id": "BESS-001",
     "attribution": {
@@ -97,5 +97,5 @@
     "start_timestamp_utc": "2024-12-12T00:00:00Z"
   },
   "historical_information_set": "REAL realized prices; ex-post perfect hindsight",
-  "historical_record_written": true
+  "historical_record_written": false
 }

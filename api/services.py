@@ -11,7 +11,7 @@ from threading import Lock
 from typing import Any, cast
 from uuid import UUID, uuid4
 
-from sqlalchemy import desc, func, select
+from sqlalchemy import case, desc, func, select
 from sqlalchemy.orm import Session
 
 from alerts.schemas import AlertStatus, AlertType
@@ -447,7 +447,13 @@ def _latest_commercial(session: Session, asset_id: str) -> RevenueAtRiskModel | 
     return session.scalar(
         select(RevenueAtRiskModel)
         .where(RevenueAtRiskModel.asset_id == asset_id)
-        .order_by(desc(RevenueAtRiskModel.created_at))
+        # The dashboard's acceptance/demo contract is the REAL-price historical
+        # benchmark. Keep a persisted forecast available for research, but do
+        # not silently replace the real-data demonstration with it.
+        .order_by(
+            case((RevenueAtRiskModel.price_source == "REAL", 0), else_=1),
+            desc(RevenueAtRiskModel.created_at),
+        )
         .limit(1)
     )
 
@@ -829,6 +835,23 @@ class CopilotService:
     def query(self, request: CopilotQueryRequest) -> CopilotQueryResponse:
         if not self.enabled:
             raise FeatureUnavailableError("AI Copilot is not configured.")
+        normalized = " ".join(request.query.casefold().split())
+        refused_phrases = (
+            "database_url",
+            "gemini_api_key",
+            "entsoe_api_token",
+            "supabase_secret",
+            "arbitrary sql",
+            "hidden fault label",
+        )
+        if any(phrase in normalized for phrase in refused_phrases):
+            return CopilotQueryResponse(
+                status="REFUSED",
+                answer=(
+                    "I cannot reveal credentials, expose hidden evaluation labels, or execute "
+                    "arbitrary database commands."
+                ),
+            )
         from besspulse.agents.knowledge import QueryRoute, route_query
         from rag.service import KnowledgeService
 
@@ -869,8 +892,9 @@ class CopilotService:
 
 
 class HealthService:
-    def __init__(self, session: Session) -> None:
+    def __init__(self, session: Session, settings: APISettings) -> None:
         self.session = session
+        self.settings = settings
 
     def components(self) -> dict[str, str]:
         self.session.execute(select(1)).scalar_one()
@@ -882,7 +906,7 @@ class HealthService:
             "anomaly": self._table_status(AnomalyEventModel),
             "commercial": self._table_status(RevenueAtRiskModel),
             "market_data": self._table_status(MarketDataModel),
-            "copilot": "optional_unavailable",
+            "copilot": "available" if self.settings.rag_enabled else "optional_unavailable",
             "model_artifacts": self._artifact_status(),
         }
         return checks
@@ -896,7 +920,7 @@ class HealthService:
             root / "delivery_risk" / "6h" / "metadata.json",
             root / "delivery_risk" / "12h" / "metadata.json",
             root / "delivery_risk" / "24h" / "metadata.json",
-            root / "price" / "metadata.json",
+            root / "price" / "price_forecast_v1" / "metadata.json",
         )
         return "available" if all(path.is_file() for path in required) else "unavailable"
 

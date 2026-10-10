@@ -1,0 +1,96 @@
+{
+  "report_type": "BESSPulse final acceptance demonstration",
+  "generated_at_utc": "2026-10-10T12:46:07.804019Z",
+  "source_commit_before_acceptance_fixes": "ed1fe519c5d75617a6f5bfc9a155e6e6466665f2",
+  "status": "PASS WITH LIMITATIONS",
+  "provenance": {
+    "battery": "SIMULATED BESS TELEMETRY",
+    "market": "REAL ENTSO-E MARKET DATA",
+    "engineering": "DERIVED",
+    "predictions": "MODEL_PREDICTION",
+    "commercial": "COUNTERFACTUAL",
+    "copilot": "AI-GENERATED EXPLANATION when Gemini is configured; acceptance used grounded retrieval only"
+  },
+  "asset": {"asset_id": "BESS-001", "rated_power_mw": 20.0, "rated_energy_mwh": 40.0, "pcs_count": 4, "racks_per_pcs": 8, "rack_count": 32},
+  "simulated_demo": {
+    "seed": 42,
+    "interval_minutes": 5,
+    "start_utc": "2026-02-05T00:00:00Z",
+    "end_utc": "2026-02-14T23:55:00Z",
+    "interval_count": 2880,
+    "fault_event_count": 15,
+    "persisted_counts": {"battery_telemetry": 2880, "pcs_telemetry": 11520, "rack_telemetry": 92160, "fault_ground_truth_rows": 540, "availability_snapshots": 2880, "delivery_risk_predictions": 1768, "anomaly_events": 63},
+    "operational_scenario": "A degraded capability profile is replayed by time-of-day against the selected REAL historical market day. Operational outputs do not expose injected labels.",
+    "offline_evaluation": {"classification": "SIMULATED EVALUATION ONLY", "selected_scenario": "RACK_OFFLINE", "component_id": "PCS-02-RACK-04", "start_utc": "2026-02-14T00:00:00Z", "isolation_note": "Excluded from operational features, inference, availability, commercial optimization, alerts, and Copilot tools."}
+  },
+  "real_market_data": {
+    "region": "DE-LU",
+    "dataset": "day-ahead price",
+    "provenance": "REAL",
+    "stored_coverage_utc": {"start": "2023-12-31T23:00:00Z", "end": "2025-01-01T22:45:00Z"},
+    "commercial_window_utc": {"start": "2024-12-12T00:00:00Z", "end_exclusive": "2024-12-13T00:00:00Z"},
+    "commercial_sequence": {"observations": 96, "resolution_minutes": 15, "minimum_eur_per_mwh": 108.51, "maximum_eur_per_mwh": 1000.0, "mean_eur_per_mwh": 320.040625, "negative_observations": 0},
+    "full_price_benchmark": {"observations": 35053, "resolution_minutes": 15, "missing_intervals": 179, "duplicate_intervals": 0, "negative_price_observations": 1980},
+    "live_ingestion": "NOT AVAILABLE: ENTSOE_API_TOKEN was not configured; no replacement data was fabricated.",
+    "other_datasets": "NOT AVAILABLE: actual/forecast load, wind, and solar are absent from the stored database."
+  },
+  "latest_operational_outputs": {
+    "availability": {"timestamp_utc": "2026-02-14T23:55:00Z", "technical": 1.0, "discharge_power_mw": 20.0, "charge_power_mw": 20.0, "discharge_energy_mwh": 12.623274592734397, "charge_energy_mwh": 19.63124627780242, "requested_power_availability": 1.0, "limiting_factors": ["CAPACITY_FADE", "ENERGY_LIMIT"]},
+    "delivery_risk": {
+      "6h": {"timestamp_utc": "2026-02-14T17:55:00Z", "probability": 0.12345679012345678},
+      "12h": {"timestamp_utc": "2026-02-14T11:55:00Z", "probability": 0.3125},
+      "24h": {"timestamp_utc": "2026-02-13T23:55:00Z", "probability": 0.8864628820960698, "calibration_status": "LIMITED", "warning": "Poor out-of-time calibration; interpret cautiously."}
+    },
+    "latest_anomaly": {"component_id": "PCS-04-RACK-08", "detector": "vote_ensemble_v1", "start_utc": "2026-02-14T09:30:00Z", "end_utc": "2026-02-14T10:15:00Z", "peak_score": 0.5, "supporting_detectors": ["isolation_forest", "residual"], "provenance": "DERIVED"}
+  },
+  "availability_sanity_cases": [
+    {"case": "technical high, power lower", "timestamp_utc": "2026-02-12T04:00:00Z", "technical_availability": 1.0, "discharge_power_availability": 0.875, "discharge_power_mw": 17.5},
+    {"case": "power high, energy constrained", "timestamp_utc": "2026-02-05T00:00:00Z", "discharge_power_availability": 1.0, "discharge_energy_availability": 0.49509149020334675, "discharge_energy_mwh": 15.209210579046811},
+    {"case": "capability sufficient, delivery underperforms", "timestamp_utc": "2026-02-08T08:00:00Z", "requested_power_availability": 1.0, "requested_power_mw": 1.9732050807568882, "actual_power_mw": 1.6772243186433549, "delivery_ratio": 0.85}
+  ],
+  "models": {
+    "expected_power": {"selected_model": "random_forest", "version": "expected_power_v1", "feature_version": "v1", "test": {"mae": 0.9138274722689188, "rmse": 1.778303733542655, "r2": 0.9772321920433493, "bias": -0.009679623667020704, "active_mae": 0.904372997848383}},
+    "expected_temperature": {"selected_model": "ridge_linear", "version": "expected_temperature_v1", "feature_version": "v1", "test": {"mae_c": 0.017094705165048768, "rmse_c": 0.11112989403056689, "r2": 0.9994525262668348, "bias_c": 0.0021726841256477906}},
+    "delivery_risk": {
+      "target_semantics": "failure in (T,T+h]; incomplete end horizons censored; chronological purged splits with separate calibration",
+      "6h": {"positive": 535, "negative": 3425, "events": 8, "prevalence": 0.1351010101010101, "precision": 0.967741935483871, "recall": 0.7317073170731707, "f1": 0.8333333333333334, "roc_auc": 0.9264102677193136, "pr_auc": 0.8580116666269302, "brier": 0.025654996434815988, "ece": 0.11020535978589424},
+      "12h": {"positive": 895, "negative": 2993, "events": 8, "prevalence": 0.23019547325102882, "precision": 0.9117647058823529, "recall": 0.2366412213740458, "f1": 0.37575757575757573, "roc_auc": 0.6152021075685198, "pr_auc": 0.37915980641620517, "brier": 0.1577130691678741, "ece": 0.13344534059478005},
+      "24h": {"positive": 1615, "negative": 2129, "events": 8, "prevalence": 0.43135683760683763, "precision": 0.400355871886121, "recall": 1.0, "f1": 0.5717916137229987, "roc_auc": 0.5651104516979888, "pr_auc": 0.4743437131753053, "brier": 0.48039963573175265, "ece": 0.49499059008476387, "calibration_status": "LIMITED; every test row classified positive"}
+    },
+    "price_forecast": {"selected_model": "simple_blend", "version": "price_forecast_v1", "feature_version": "price_features_v1", "test": {"mae": 36.22190399295361, "rmse": 64.38301372210294, "r2": 0.2848116104119498, "bias": -10.712470150714427, "median_ae": 26.326666666666664, "p95_ae": 86.01649999999997}, "negative_price": {"rows": 146, "mae": 77.77562785, "bias": 77.41601598}, "high_price": {"threshold": 135.225, "rows": 1427, "mae": 67.48034571, "bias": -58.68991824}}
+  },
+  "anomaly_evaluation": {
+    "classification": "SIMULATED EVALUATION ONLY",
+    "engineering": {"precision": 0.9736842105263158, "recall": 0.02335858585858586, "f1": 0.04562268803945746, "pr_auc": 0.8013044191135833, "event_detection": 0.3333333333333333, "false_alerts_per_day": 0.0, "mean_delay_min": 0.0, "median_delay_min": 0.0, "missed": 4},
+    "robust_peer": {"precision": 0.0, "recall": 0.0, "f1": 0.0, "pr_auc": 0.06875, "event_detection": 0.0, "false_alerts_per_day": 0.0, "mean_delay_min": null, "median_delay_min": null, "missed": 6},
+    "isolation_forest": {"precision": 0.13921242373821408, "recall": 0.15845959595959597, "f1": 0.14821375848833776, "pr_auc": 0.2372984137005137, "event_detection": 0.8333333333333334, "false_alerts_per_day": 57.82902584493042, "mean_delay_min": 25.0, "median_delay_min": 0.0, "missed": 1},
+    "residual": {"precision": 1.0, "recall": 0.7348484848484849, "f1": 0.8471615720524017, "pr_auc": 0.7610066756205769, "event_detection": 0.3333333333333333, "false_alerts_per_day": 0.0, "mean_delay_min": 0.0, "median_delay_min": 0.0, "missed": 4},
+    "vote_ensemble": {"precision": 0.9875, "recall": 0.049873737373737376, "f1": 0.09495192307692307, "pr_auc": 0.4414783954455637, "event_detection": 0.3333333333333333, "false_alerts_per_day": 0.0, "mean_delay_min": 0.0, "median_delay_min": 0.0, "missed": 4}
+  },
+  "commercial": {
+    "provenance": "COUNTERFACTUAL",
+    "healthy": {"power_mw": 20.0, "rated_energy_mwh": 40.0, "usable_energy_mwh": 32.0, "gross_eur": 52633.61188824622, "degradation_eur": 610.675140808889, "net_eur": 52022.93674743733},
+    "current": {"minimum_power_mw": 15.5, "minimum_usable_energy_mwh": 30.778212331635444, "gross_eur": 49442.619619541176, "degradation_eur": 532.2558303217444, "net_eur": 48910.363789219424},
+    "revenue_at_risk_eur": 3112.5729582179047,
+    "revenue_at_risk_fraction": 0.059830781436444595,
+    "attribution_eur": {"power": 2151.4369888831716, "energy": 124.86479853541823, "efficiency": 751.78185033318, "availability": 64.78899275457661, "interaction": 19.700327711558202},
+    "solver": "HIGHS; healthy=optimal; current=optimal",
+    "disclaimer": "Counterfactual historical simulation, not actual commercial P&L."
+  },
+  "alerts": {"episodes": 9, "per_day": 0.9, "priority": {"INFO": 8, "LOW": 1}, "type": {"ENERGY_CAPACITY_REDUCTION": 5, "POWER_DERATING": 2, "RACK_UNAVAILABLE": 2}, "open": 1, "resolved": 8, "median_lead_minutes": 895.0, "duplicate_suppression": {"merge_window_minutes": 30, "cooldown_minutes": 60, "history_rows": 2219}, "highest": {"priority": "INFO", "type": "RACK_UNAVAILABLE", "affected_mw": 0.625, "affected_mwh": 1.0041618658705111, "risk_probability": 0.265625, "risk_horizon_hours": 12, "anomaly_score": 0.25, "status": "RESOLVED"}},
+  "monitoring": {"freshness_checks": 6, "freshness_status": "CRITICAL because fixed demo timestamps are intentionally historical", "feature_missing_fraction": 0.0, "drift_note": "Measured chronological demo drift; not a battery fault", "risk_means": {"6h": 0.1707855556316693, "12h": 0.34749762817647945, "24h": 0.8953464619708846}, "artifact_health": "OK for all seven representative model families", "labels": "Held-out offline labels only; no fabricated production labels"},
+  "copilot": {"gemini": "NOT AVAILABLE: GEMINI_API_KEY not configured", "operational": "NOT AVAILABLE: operational tools absent; current-state questions fail closed", "rag": "PASS: 149 approved chunks and canonical citations", "security": "PASS: secret, SQL, and hidden-label probes return REFUSED"},
+  "evidence": {
+    "pytest": "231 passed, 2 skipped, 0 failed, 5 warnings",
+    "ruff": "PASS",
+    "format": "296 files",
+    "mypy": "PASS: 217 source files",
+    "sqlite_migration": "ca24190e0bd6 head; no drift",
+    "postgresql": "PASS: PostgreSQL 16 SELECT 1, 16 tables, head revision, insert/read/rollback, zero residual rows",
+    "docker": "PASS: both images built; containers healthy; container RAG passed; image secret probe clean",
+    "fastapi": "PASS: required seeded endpoints returned 200 via actual HTTP",
+    "streamlit": "PASS: server 200 and all ten pages ran without exceptions",
+    "mlflow": "PASS: seven runs; lineage, metrics, periods, versions, Git commit; zero secret findings",
+    "deployment": "NOT AVAILABLE: no authorized public target or verified public URL"
+  }
+}

@@ -20,6 +20,9 @@ def persist_anomaly_events(session: Session, events: pd.DataFrame) -> int:
         )
         if existing is not None:
             continue
+        supporting_signals = row["supporting_signals"]
+        if hasattr(supporting_signals, "tolist"):
+            supporting_signals = supporting_signals.tolist()
         session.add(
             AnomalyEventModel(
                 anomaly_event_id=row["anomaly_event_id"],
@@ -31,7 +34,7 @@ def persist_anomaly_events(session: Session, events: pd.DataFrame) -> int:
                 end_timestamp=row["end_timestamp"],
                 peak_score=float(row["peak_score"]),
                 mean_score=float(row["mean_score"]),
-                supporting_signals_json=json.dumps(row["supporting_signals"]),
+                supporting_signals_json=json.dumps(supporting_signals),
                 feature_set_version="v1",
                 data_provenance="DERIVED",
                 created_at=datetime.now(UTC),

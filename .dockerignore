@@ -16,7 +16,6 @@ htmlcov
 *.tmp
 .rag
 mlruns
-artifacts/models
 data/raw
 data/processed
 tests

@@ -69,8 +69,8 @@ def get_market_service(session: DBSession, settings: Settings) -> MarketService:
     return MarketService(session, settings)
 
 
-def get_health_service(session: DBSession) -> HealthService:
-    return HealthService(session)
+def get_health_service(session: DBSession, settings: Settings) -> HealthService:
+    return HealthService(session, settings)
 
 
 def get_monitoring_service(session: DBSession) -> MonitoringService:

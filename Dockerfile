@@ -22,6 +22,7 @@ COPY --from=builder /wheels /wheels
 RUN python -m pip install --no-cache-dir /wheels/* && rm -rf /wheels
 WORKDIR /app
 COPY --chown=besspulse:besspulse . .
+RUN python -m rag.index && chown -R besspulse:besspulse /app/.rag
 USER besspulse
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \

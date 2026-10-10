@@ -34,8 +34,9 @@ services:
     environment:
       APP_ENV: production
       DATABASE_URL: postgresql+psycopg://besspulse:${POSTGRES_PASSWORD:-besspulse_local_only}@postgres:5432/besspulse_test
-      API_CORS_ORIGINS: http://localhost:8501
+      API_CORS_ORIGINS: '["http://localhost:8501"]'
       ENABLE_SIMULATION_CONTROL_API: "false"
+      RAG_ENABLED: "true"
       RAG_BACKEND: local
       API_JSON_LOGS: "true"
     ports:

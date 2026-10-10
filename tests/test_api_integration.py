@@ -475,8 +475,8 @@ def test_copilot_openapi_and_secret_safe_errors(
         "/api/v1/copilot/query",
     ):
         assert path in paths
-    assert "AQ.Ab8RN6" not in schema.text
-    assert "831fc90f" not in schema.text
+    assert "example-gemini-secret" not in schema.text
+    assert "example-entsoe-secret" not in schema.text
 
     class BrokenAssetService(AssetService):
         def list_assets(self) -> tuple[Any, ...]:

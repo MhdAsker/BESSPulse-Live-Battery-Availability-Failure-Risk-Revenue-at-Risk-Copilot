@@ -1,13 +1,29 @@
 """Strict document discovery and heading-aware deterministic chunking."""
 
 import hashlib
+import os
 import re
 from pathlib import Path
 
 from rag.schemas import KnowledgeChunk
 
-ROOT = Path(__file__).resolve().parents[2]
-APPROVED_FILES = (ROOT / "README.md",)
+# Wheels place this module under site-packages, so source-relative traversal does
+# not identify the copied application/docs tree in a production image.
+ROOT = Path(os.getenv("BESSPULSE_PROJECT_ROOT", Path.cwd())).resolve()
+APPROVED_FILES = tuple(
+    ROOT / name
+    for name in (
+        "README.md",
+        "ALERT_INTERPRETATION.md",
+        "AVAILABILITY_DEFINITIONS.md",
+        "DATA_PROVENANCE.md",
+        "FEATURE_DICTIONARY.md",
+        "ML_METHODOLOGY.md",
+        "MODEL_CARD.md",
+        "REVENUE_AT_RISK.md",
+        "TARGET_DEFINITION.md",
+    )
+)
 APPROVED_DIRS = (ROOT / "docs",)
 EXCLUDED_PARTS = {".git", ".env", "data", "artifacts", "mlruns", ".rag", "secrets"}
 
